@@ -1,0 +1,21 @@
+name: 'Build and Deploy blog'
+on:
+  push:	
+    branches:	
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+      with:
+        submodules: true
+
+    - name: Build and Deploy
+      uses: solybum/hexo-deploy@master
+      env:
+        PERSONAL_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        PUBLISH_REPOSITORY: retech-fe/blog # The repository the action should deploy to.
+        BRANCH: blog  # The branch the action should deploy to.
+        PUBLISH_DIR: ./public # The folder the action should deploy.
