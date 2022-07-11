@@ -350,7 +350,7 @@ navbar:
     - { key: "category", link: "/categories/", icon: "iconfont icon-category-fill" }
     - { key: "tag", link: "/tags/", icon: "iconfont icon-tags-fill" }
     - { key: "about", link: "/about/", icon: "iconfont icon-user-fill" }
-    #- { key: "links", link: "/links/", icon: "iconfont icon-link-fill" }
+    - { key: "links", link: "/links/", icon: "iconfont icon-link-fill" }
 
 # 搜索功能，基于 hexo-generator-search 插件，若已安装其他搜索插件请关闭此功能，以避免生成多余的索引文件
 # Search feature, based on hexo-generator-search. If you have installed other search plugins, please disable this feature to avoid generating redundant index files
@@ -726,7 +726,7 @@ post:
   # 评论插件
   # Comment plugin
   comments:
-    enable: false
+    enable: true
     # 指定的插件，需要同时设置对应插件的必要参数
     # The specified plugin needs to set the necessary parameters at the same time
     # Options: utterances | disqus | gitalk | valine | waline | changyan | livere | remark42 | twikoo | cusdis | giscus
@@ -746,7 +746,7 @@ post:
 # Based on GitHub Issues
 # See: https://utteranc.es
 utterances:
-  repo:  repo: retech-fe/retech-fe.github.io/
+  repo: retech-fe/blog
   issue_term: pathname
   label: utterances
   theme: github-light
@@ -999,9 +999,9 @@ links:
   # Member item of page
   items:
     - {
-      title: "Fluid Blog",
-      intro: "主题博客",
-      link: "https://hexo.fluid-dev.com/",
+      title: "Retech Weekly",
+      intro: "Retech-FE周刊 ",
+      link: "https://github.com/retech-fe/weekly",
       avatar: "/img/favicon.png"
     }
     - {
