@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - main  # default branch
-
+  pull_request:
+    branches:
+      - main  # default branch
 jobs:
   pages:
     runs-on: ubuntu-latest

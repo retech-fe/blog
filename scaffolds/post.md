@@ -1,11 +1,9 @@
 ---
-title: {{ title }}
+title: 
 date: {{ date }}
-updated:
-index_img: 
+#分类
 categories:
-tags:
-  - 面试
-  - es6
-excerpt: 
+#标签
+tags: 
+excerpt:
 ---
