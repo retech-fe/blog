@@ -1,5 +1,5 @@
 ---
-title: {{ title }}
+title: title
 date: {{ date }}
 #分类
 categories:
