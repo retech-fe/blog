@@ -93,11 +93,11 @@ excerpt:
 
 ## 发起Pull request
 
-1. 
+1. 开启一个新的pr
 
 ![](https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/qYhT4KYY4b.jpg)
 
-2. 
+2. 选择分支
 
 ![](https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/20220712170101.png)
 

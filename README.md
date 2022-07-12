@@ -9,4 +9,3 @@
 
 [图床](https://github.com/retech-fe/blog/blob/develop/ImageUpload.md)
 
-## 感谢
