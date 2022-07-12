@@ -17,9 +17,16 @@
 [下载地址](https://github.com/Molunerfinn/PicGo/releases);可以下载稳定的最新版，![](https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/07/12/13-07-00-5028f1118b2eb733ad72036514baf438-20220712130700-5886b6.png)
 
 ### 配置
+
 具体配置可以查看[官方文档](https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A)。
 
-token需要配置你的token，仓库名、分支名、存储路径大家都统一
+首先切换到![github图床](https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/07/12/14-23-09-77bdb2b495c15542ac342c6481afba8a-20220712142308-9f0a2b.png)；可以把其他图床关掉，只留下github
+
++ token需要配置你的token；[如何生成token](https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A)，上面的文档第三步
++ 仓库名: `retech-fe/image-hosting`
++ 分支名: `main`
++ 存储路径: `img/`
+
 ![](https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/07/12/13-14-30-9ce2dd5f6af0e658cf66a862e3cd4942-20220712131430-6511eb.png)
 
 如果觉得上传后得文件名比较长可以下载安装插件[picgo-plugin-rename-file](https://github.com/liuwave/picgo-plugin-rename-file#readme)。
@@ -27,6 +34,16 @@ token需要配置你的token，仓库名、分支名、存储路径大家都统�
 文件名格式可以配置如下：
 ```
 {y}/{m}/{d}/{h}-{i}-{s}-{hash}-{origin}-{rand:6}
+```
+
+### 如何使用图片
+
+上传完图片后，可以切换到![相册](https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/07/12/14-29-38-d0076907599c1e003a0ca7a18ada3f88-20220712142937-6ae996.png)，复制链接
+
+在Markdown的用法如下：
+
+```
+![相册](https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/07/12/14-29-38-d0076907599c1e003a0ca7a18ada3f88-20220712142937-6ae996.png)
 ```
 
 
@@ -40,3 +57,4 @@ token需要配置你的token，仓库名、分支名、存储路径大家都统�
 ### picx
 
 [picx](https://picx.xpoet.cn/#/upload)
+
