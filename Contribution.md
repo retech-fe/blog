@@ -79,7 +79,7 @@ excerpt:
 
 #### tags可选规范
 
-**例如：** ECMAScript、TypeScript、WebAssembly、Node， React、Vue、Angular，Webpack，Flutter，微前端 等待
+**例如：** ECMAScript、TypeScript、WebAssembly、Node， React、Vue、Angular，Webpack，Flutter，微前端等等。
 
 ### 开始编写
 
