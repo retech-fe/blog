@@ -22,9 +22,7 @@ author: zhongnan(Nacy)
 
 > JS中所有函数都会有prototype属性，只有函数才有其所有的属性和方法都能被构造函数的实例对象共享访问
 
-  代码如下：
-
-	
+代码如下：
 
 ```javascript
 	function Person(name){
@@ -41,25 +39,24 @@ author: zhongnan(Nacy)
 
 ### 2.2 构造函数（constructor)
 
-> JS中constructor存在每个函数的prototype属性中，其保存了指向该函数的引用
+> JS 中 constructor 存在每个函数的 prototype 属性中，其保存了指向该函数的引用
 
 ```javascript
-Person.prototype.constructor ==Person   //true
+Person.prototype.constructor == Person //true
 ```
 
 
 ### 2.3 原型链
 
->在JavaScript中是通过prototype对象指向父类对象，直到指向Object对象为止（person → Person → Object），这样就形成了一个原型指向的链条，专业术语称之为原型链
+> 在 JavaScript 中是通过 prototype 对象指向父类对象，直到指向 Object 对象为止（person → Person → Object），这样就形成了一个原型指向的链条，专业术语称之为原型链
 
 - 当我们访问对象的一个属性或方法时，它会先在对象自身中寻找，如果有则直接使用，如果没有则会去原型对象中寻找，如果找到则直接使用。
-- 如果没有则去原型的原型中寻找,直到找到Object对象的原型，Object对象的原型没有原型，如果在Object原型中依然没有找到，则返回undefined。
-- 注意：Object的_proto_为空, 即原型链的尽头一般来说都是 Object.prototype
+- 如果没有则去原型的原型中寻找,直到找到 Object 对象的原型，Object 对象的原型没有原型，如果在 Object 原型中依然没有找到，则返回 undefined。
+- 注意：Object 的*proto*为空, 即原型链的尽头一般来说都是 Object.prototype
 
 ```javascript
 p1.__proto__ == Person.prototype
 ```
-
 
 > JS 引擎查找摸个属性时，先查找对象本身是否存在该属性，如果不存在就会在原型链上一层一层进行查找
 
@@ -67,29 +64,29 @@ p1.__proto__ == Person.prototype
 
 #### 由图我们可知几个关系：
 
-- 每一个构造函数都有(原型)prototype指向它的原型对象。
-- 原型对象有constructor指向它的构造函数。
-- 构造函数可以通过new 的创建方式创建实例对象
-- 实例对象通过proto指向它的原型对象。
-- 原型对象也有自己的原型对象，通过proto指向。
+- 每一个构造函数都有(原型)prototype 指向它的原型对象。
+- 原型对象有 constructor 指向它的构造函数。
+- 构造函数可以通过 new 的创建方式创建实例对象
+- 实例对象通过 proto 指向它的原型对象。
+- 原型对象也有自己的原型对象，通过 proto 指向。
 
 ### 3.目前我总结常用的一共有6种继承方式
 
- -  原型链继承
- -  借用构造函数继承
- -  组合式继承（原型链+构造函数）
- -  原型式继承 
- -  寄生式继承
- -  寄生组合式继承
- 咱们本期先讲解 **原型链继承**和**原型式继承** ，如果想了解其他的继承可查看我的 关于 [详解js继承的那些事儿](https://blog.csdn.net/qq_34574204/article/details/120716964)
+- 原型链继承
+- 借用构造函数继承
+- 组合式继承（原型链+构造函数）
+- 原型式继承
+- 寄生式继承
+- 寄生组合式继承
+  咱们本期先讲解 **原型链继承**和**原型式继承** ，如果想了解其他的继承可查看我的 关于 [详解 js 继承的那些事儿](https://blog.csdn.net/qq_34574204/article/details/120716964)
 
 ```javascript
 //父类
-function Person(name){
-	this.name = name;
-	this.sum=function(){
-		alert('this.name',this.name)
-	}
+function Person(name) {
+  this.name = name
+  this.sum = function () {
+    alert("this.name", this.name)
+  }
 }
 Person.prototype.age = 100
 ```
@@ -103,8 +100,8 @@ Person.prototype.age = 100
 **缺点：** 不能向父类传递参数，由于实例的原型等于父类的实例，那么改变父类的属性，实例的属性也会跟着改变
 
 ```javascript
-function child(){
-	this.name="xiaoming"
+function child() {
+  this.name = "xiaoming"
 }
 child.prototype = new Person()
 let child1 = new Child()
@@ -122,13 +119,12 @@ child1 instanceof Person //true
 **缺点：** 所有实例都继承在原型上面 无法复用
 
 ```javascript
-function child(obj){
-	　function F(){}
-	　F.prototype = obj
-	　return new F()
+function child(obj) {
+  function F() {}
+  F.prototype = obj
+  return new F()
 }
 let child1 = new Person()
 let child2 = child(child1)
 child2.age //100
 ```
-
