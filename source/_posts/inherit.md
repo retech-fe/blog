@@ -4,7 +4,7 @@ date: 2022-07-21 22:11:02
 categories: 基础技术之继承
 tags: javascript
 excerpt: 主要讲解继承中原型和原型链继承和原型、原型链的基本知识
-author: zhongnan(Nacy)
+author: zhongnan(Tina)
 ---
 ## 1. 什么是继承?
 
