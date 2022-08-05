@@ -1,8 +1,8 @@
 ---
 title: JavaScript中new操作符的原理
 date: 2022-08-05 19:08:02
-categories: 基础技术之new
-tags: javascript
+categories: JavaScript基础
+tags: JavaScript
 excerpt: 主要讲解JavaScript中new操作符的原理
 author: taotao1.liu
 ---
