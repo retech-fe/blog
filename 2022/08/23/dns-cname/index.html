@@ -13,35 +13,29 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="Re:Tech FE">
+  <meta name="author" content="pengfei.zuo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="欢迎体验 Fluid ，这是一款 Material Design 风格的 Hexo 主题，以简约的设计帮助你专注于写作，本篇文章可预览主题的样式及功能。">
+    <meta name="description" content="主要讲解使用A记录和CNAME的概念及进行域名解析的区别。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello Fluid">
-<meta property="og:url" content="https://retech-fe.github.io/blog/2020/04/22/hello-fluid/index.html">
+<meta property="og:title" content="域名解析 | A记录 ，CNAME，MX你懂了吗？">
+<meta property="og:url" content="https://retech-fe.github.io/blog/2022/08/23/dns-cname/index.html">
 <meta property="og:site_name" content="Re:Tech FE Blog">
-<meta property="og:description" content="欢迎体验 Fluid ，这是一款 Material Design 风格的 Hexo 主题，以简约的设计帮助你专注于写作，本篇文章可预览主题的样式及功能。">
+<meta property="og:description" content="主要讲解使用A记录和CNAME的概念及进行域名解析的区别。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/post.png?w=1280&fmt=webp">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp">
-<meta property="article:published_time" content="2020-04-22T22:22:22.000Z">
+<meta property="og:image" content="https://files.mdnice.com/user/13996/cd5eff55-8573-4395-8e7f-80d319fc85cf.png">
+<meta property="article:published_time" content="2022-08-23T13:11:02.000Z">
 <meta property="article:modified_time" content="2022-08-23T05:11:59.623Z">
 <meta property="article:author" content="Re:Tech FE">
-<meta property="article:tag" content="示例">
-<meta property="article:tag" content="Fluid">
+<meta property="article:tag" content="网络">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/post.png?w=1280&fmt=webp">
+<meta name="twitter:image" content="https://files.mdnice.com/user/13996/cd5eff55-8573-4395-8e7f-80d319fc85cf.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Hello Fluid - Re:Tech FE Blog</title>
+  <title>域名解析 | A记录 ，CNAME，MX你懂了吗？ - Re:Tech FE Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -233,7 +227,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Hello Fluid"></span>
+            <span id="subtitle" data-typed-text="域名解析 | A记录 ，CNAME，MX你懂了吗？"></span>
           
         </div>
 
@@ -243,14 +237,14 @@
     
       <span class="post-meta mr-2">
         <i class="iconfont icon-author" aria-hidden="true"></i>
-        Re:Tech FE
+        pengfei.zuo
       </span>
     
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2020-04-22 22:22" pubdate>
-          2020年4月22日 晚上
+        <time datetime="2022-08-23 13:11" pubdate>
+          2022年8月23日 下午
         </time>
       </span>
     
@@ -261,7 +255,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.4k 字
+          1.7k 字
         
       </span>
     
@@ -272,7 +266,7 @@
         
         
         
-          20 分钟
+          15 分钟
         
       </span>
     
@@ -318,144 +312,49 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Hello Fluid</h1>
+            <h1 style="display: none">域名解析 | A记录 ，CNAME，MX你懂了吗？</h1>
             
             
               <div class="markdown-body">
                 
-                <blockquote>
-<p>欢迎体验 <a target="_blank" rel="noopener" href="https://github.com/fluid-dev/hexo-theme-fluid">Fluid</a> ，这是一款 Material Design 风格的 Hexo 主题，以简约的设计帮助你专注于写作，本篇文章可预览主题的样式及功能。</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="文字"><a href="#文字" class="headerlink" title="文字"></a>文字</h2><p>文章大部分使用的是 github-markdown 样式，并加入了一些 Material 风格。</p>
-<h3 id="H3-标题"><a href="#H3-标题" class="headerlink" title="H3 标题"></a>H3 标题</h3><h4 id="H4-标题"><a href="#H4-标题" class="headerlink" title="H4 标题"></a>H4 标题</h4><p><strong>粗体</strong></p>
-<p><em>斜体</em></p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>行内代码：<code>$ hexo new post &quot;My New Post&quot;</code></p>
-<p>代码高亮使用的是 highlight.js，支持 185 种语言和 91 种高亮样式：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">fib</span>(<span class="hljs-params">n</span>):<br>    a, b = <span class="hljs-number">0</span>, <span class="hljs-number">1</span><br>    <span class="hljs-keyword">while</span> a &lt; n:<br>        <span class="hljs-built_in">print</span>(a, end=<span class="hljs-string">&#x27; &#x27;</span>)<br>        a, b = b, a+b<br>    <span class="hljs-built_in">print</span>()<br>fib(<span class="hljs-number">1000</span>)<br></code></pre></td></tr></table></figure>
-
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> Map <span class="hljs-keyword">struct</span> &#123;<br>    mu Mutex<br>    read atomic.Value<br>    dirty <span class="hljs-keyword">map</span>[<span class="hljs-keyword">interface</span>&#123;&#125;]*entry<br>    misses <span class="hljs-type">int</span><br>&#125;<br></code></pre></td></tr></table></figure>
-
-<h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><table>
-<thead>
-<tr>
-<th>Header 1</th>
-<th>Header 2</th>
-<th>Header 3</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Key 1</td>
-<td>Value 1</td>
-<td>Comment 1</td>
-</tr>
-<tr>
-<td>Key 2</td>
-<td>Value 2</td>
-<td>Comment 2</td>
-</tr>
-<tr>
-<td>Key 3</td>
-<td>Value 3</td>
-<td>Comment 3</td>
-</tr>
-</tbody></table>
-<h2 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h2><h3 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h3><p>Fluid 相较于其他主题的优势：</p>
-<ol>
-<li>设计遵循简洁至上，同时具有轻快的体验，和优雅的颜值；</li>
-<li>提供大量定制化配置项，使每个用户使用该主题都能具有独特的样式；</li>
-<li>响应式页面，适配手机、平板等设备；</li>
-</ol>
-<h3 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h3><p>Fluid 功能特性：</p>
+                <h2 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h2><p>什么是域名解析？</p>
+<p>域名解析就是国际域名、国内域名、中文域名等域名申请后做的到IP地址的转换过程。IP地址是网路上标识您站点的数字地址，为了简单好记，采用域名来代替ip地址标识站点地址。域名的解析工作由<code>DNS</code>服务器完成。</p>
+<p>如下图，百度 <code>www.baidu.com</code> 就是域名，解析出来的<code>IP</code> <code>39.156.66.10</code> 这个过程就是域名解析。<br><img src="https://files.mdnice.com/user/13996/cd5eff55-8573-4395-8e7f-80d319fc85cf.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h2 id="A-记录"><a href="#A-记录" class="headerlink" title="A 记录"></a>A 记录</h2><p><code>A (Address)记录</code>是用来指定主机名（或域名）对应的IP地址记录。用户可以将该域名下的网站服务器指向到自己的<code>web server</code>上。同时也可以设置您域名的二级域名。</p>
+<p>又称IP指向，用户可以在此设置子域名并指向到自己的目标主机地址上，从而实现通过域名找到服务器。</p>
+<p>  指向的目标主机地址类型只能使用IP地址；</p>
 <ul>
-<li>图片懒加载</li>
-<li>自定义代码高亮方案</li>
-<li>内置多语言</li>
-<li>支持多款评论插件</li>
-<li>支持使用数据文件存放配置</li>
-<li>自定义静态资源 CDN</li>
-<li>内置文章搜索</li>
-<li>页脚备案信息</li>
-<li>网页访问统计</li>
-<li>支持 LaTeX 数学公式</li>
-<li>支持 mermaid 流程图</li>
-<li>音乐播放器</li>
+<li>1.如何添加A记录</li>
 </ul>
-<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p><img src="https://rmt.dogedoge.com/fetch/fluid/storage/post.png?w=1280&fmt=webp" srcset="/blog/img/loading.gif" lazyload></p>
-<h2 id="LaTex"><a href="#LaTex" class="headerlink" title="LaTex"></a>LaTex</h2><p>基于 MathJax 引擎：</p>
-<p>$$<br>\Gamma _ { \epsilon } ( x ) &#x3D; [ 1- e ^ { - 2\pi \epsilon } ] ^ { 1- x } \prod _ { n &#x3D; 0} ^ { \infty } \frac { 1- \operatorname{exp} ( - 2\pi \epsilon ( n + 1) ) } { 1- \operatorname{exp} ( - 2\pi \epsilon ( x + n ) ) }<br>$$</p>
-<p>$$<br>\left( \begin{array} c t ^ { \prime } \ x ^ { \prime } \ y ^ { \prime } \ z ^ { \prime } \end{array} \right) &#x3D; \left( \begin{array} { c c c c } { \gamma } &amp; { - \gamma \beta } &amp; { 0 } &amp; { 0 } \ { - \gamma \beta } &amp; { \gamma } &amp; { 0 } &amp; { 0 } \ { 0 } &amp; { 0 } &amp; { 1 } &amp; { 0 } \ { 0 } &amp; { 0 } &amp; { 0 } &amp; { 1 } \end{array} \right) \left( \begin{array} c t \ x \ y \ z \end{array} \right)<br>$$</p>
-<p>$$<br>6 \mathrm { CO } _ { 2 } + 6 \mathrm { H } _ { 2 } \mathrm { O } \rightarrow \mathrm { C } _ { 6 } \mathrm { H } _ { 12 } \mathrm { O } _ { 6 } + 6 \mathrm { O } _ { 2 }<br>$$</p>
-<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p>基于 mermaid 语法：</p>
-<pre><code class=" mermaid">sequenceDiagram
-participant Alice
-participant Bob
-Alice-&gt;&gt;John: Hello John, how are you?
-loop Healthcheck
-    John-&gt;&gt;John: Fight against hypochondria
-end
-Note right of John: Rational thoughts &lt;br/&gt;prevail...
-John--&gt;&gt;Alice: Great!
-John-&gt;&gt;Bob: How about you?
-Bob--&gt;&gt;John: Jolly good!
-</code></pre>
+<p>  在“主机名”中填入子域的名字，“类型”为A，“IP地址&#x2F;主机名”中填入web服务器的IP地址，点击“新增”按钮即可。</p>
+<p>  注：如果“主机名”一栏为空则表示对域名mydomain.com本身做指向。</p>
+<ul>
+<li>2.泛域名解析</li>
+</ul>
+<p>  即将该域名所有未指定的子域名都指向一个空间。</p>
+<p>  在“主机名”中填入*，“类型”为A，“IP地址&#x2F;主机名”中填入web服务器的IP地址。</p>
+<h2 id="CNAME记录"><a href="#CNAME记录" class="headerlink" title="CNAME记录"></a>CNAME记录</h2><p>  通常称别名指向。</p>
+<p>  这种记录允许您将多个名字映射到另外一个域名。</p>
+<p>  您可以为一个主机设置别名。比如设置test.mydomain.com，用来指向一个主机<a target="_blank" rel="noopener" href="http://www.rddns.com那么以后就可以用test.mydomain.com来代替访问www.rddns.com了./">www.rddns.com那么以后就可以用test.mydomain.com来代替访问www.rddns.com了。</a></p>
+<p>  - CNAME的目标主机地址只能使用主机名，不能使用IP地址；</p>
+<p>  - 主机名前不能有任何其他前缀，如：http:&#x2F;&#x2F;等是不被允许的；</p>
+<p>  - A记录优先于CNAME记录。即如果一个主机地址同时存在A记录和CNAME记录，则CNAME记录不生效。
+ </p>
+<h2 id="MX-记录"><a href="#MX-记录" class="headerlink" title="MX 记录"></a>MX 记录</h2><p>  邮件交换记录。</p>
+<p>  用于将以该域名为结尾的电子邮件指向对应的邮件服务器以进行处理。如：用户所用的邮件是以域名mydomain.com为结尾的，则需要在管理界面中添加该域名的MX记录来处理所有以@mydomain.com结尾的邮件。</p>
+<p>  - MX记录可以使用主机名或IP地址；</p>
+<p>  - MX记录可以通过设置优先级实现主辅服务器设置，“优先级”中的数字越小表示级别越高。也可以使用相同优先级达到负载均衡的目的；</p>
+<p>  - 如果在“主机名”中填入子域名则此MX记录只对该子域名生效。
+ </p>
+<h2 id="使用A记录和CNAME进行域名解析的区别"><a href="#使用A记录和CNAME进行域名解析的区别" class="headerlink" title="使用A记录和CNAME进行域名解析的区别?"></a>使用A记录和CNAME进行域名解析的区别?</h2><p>A记录就是把一个域名解析到一个IP地址（Address，特制数字IP地址），而CNAME记录就是把域名解析到另外一个域名。</p>
+<p>其功能是差不多，CNAME将几个主机名指向一个别名，其实跟指向IP地址是一样的，因为这个别名也要做一个A记录的。</p>
+<p>但是使用CNAME记录可以很方便地变更IP地址。如果一台服务器有100个网站，他们都做了别名，该台服务器变更IP时，只需要变更别名的A记录就可以了。</p>
+<h2 id="使用A记录和CNAME哪个好？"><a href="#使用A记录和CNAME哪个好？" class="headerlink" title="使用A记录和CNAME哪个好？"></a>使用A记录和CNAME哪个好？</h2><p>域名解析CNAME记录A记录哪一种比较好？</p>
+<p>如果论对网站的影响，就没有多大区别。但是：CNAME有一个好处就是稳定，就好像一个IP与一个域名的区别。服务商从方便维护的角度，一般也建议用户使用CNAME记录绑定域名的。如果主机使用了双线IP，显然使用CNAME也要方便一些。</p>
+<p>A记录也有一些好处，例如可以在输入域名时不用输入WWW.来访问网站哦！从SEO优化角度来看，一些搜索引擎如alex或一些搜索查询工具网站等等则默认是自动去掉WWW.来辨别网站，CNAME记录是必须有如：WWW(别名)前缀的域名，有时候会遇到这样的麻烦，前缀去掉了默认网站无法访问。</p>
+<p>有人认为，在SEO优化网站的时候，由于搜索引擎找不到去掉WWW.的域名时，对网站权重也会有些影响。因为有些网民客户也是不喜欢多写三个W来访问网站的，网站无法访问有少量网民客户会放弃继续尝试加WWW.访问域名了，因此网站访问浏览量也会减少一些。</p>
+<p>也有人认为同一个域名加WWW.和不加WWW.访问网站也会使网站权重分散，这也是个问题。但是可以使用301跳转把不加WWW.跳转到加WWW.的域名，问题就解决了</p>
 
-<pre><code class=" mermaid">gantt
-dateFormat  YYYY-MM-DD
-title Adding GANTT diagram to mermaid
-
-section A section
-Completed task            :done,    des1, 2014-01-06,2014-01-08
-Active task               :active,  des2, 2014-01-09, 3d
-Future task               :         des3, after des2, 5d
-Future task2               :         des4, after des3, 5d
-</code></pre>
-
-<pre><code class=" mermaid">classDiagram
-Class01 &lt;|-- AveryLongClass : Cool
-Class03 *-- Class04
-Class05 o-- Class06
-Class07 .. Class08
-Class09 --&gt; C2 : Where am i?
-Class09 --* C3
-Class09 --|&gt; Class07
-Class07 : equals()
-Class07 : Object[] elementData
-Class01 : size()
-Class01 : int chimp
-Class01 : int gorilla
-Class08 &lt;--&gt; C2: Cool label
-</code></pre>
-
-<h2 id="内置-Tag-插件"><a href="#内置-Tag-插件" class="headerlink" title="内置 Tag 插件"></a>内置 Tag 插件</h2><p>内置了一些 Tag 插件，用于实现 Markdown 不容易生成的样式，具体使用方式请见 <a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/guide/#tag-%E6%8F%92%E4%BB%B6">用户指南</a>。</p>
-<h3 id="便签"><a href="#便签" class="headerlink" title="便签"></a>便签</h3><div class="note note-info">
-            <p>这里可以写文字 或者 <code>markdown</code></p>
-          </div>
-
-<div class="note note-warning">
-            <p>这里可以写文字 或者 <code>markdown</code></p>
-          </div>
-
-<div class="note note-primary">
-            <p>这里可以写文字 或者 <code>markdown</code></p>
-          </div>
-
-<h3 id="行内标签"><a href="#行内标签" class="headerlink" title="行内标签"></a>行内标签</h3><span class="label label-info">行内标签</span> <span class="label label-warning">行内标签</span> <span class="label label-primary">行内标签</span>
-
-<h3 id="勾选框"><a href="#勾选框" class="headerlink" title="勾选框"></a>勾选框</h3><div>
-            <input type="checkbox" disabled checked="checked">主要是解决一些 Renderer 不支持勾选
-          </div>
-
-<h3 id="按钮"><a href="#按钮" class="headerlink" title="按钮"></a>按钮</h3><a class="btn" href="javascript:;"  target="_blank">支持链接</a>
-
-<h3 id="组图"><a href="#组图" class="headerlink" title="组图"></a>组图</h3><div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp" srcset="/blog/img/loading.gif" lazyload></div><div class="group-image-wrap"><img src="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp" srcset="/blog/img/loading.gif" lazyload></div><div class="group-image-wrap"><img src="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp" srcset="/blog/img/loading.gif" lazyload></div></div><div class="group-image-row"><div class="group-image-wrap"><img src="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp" srcset="/blog/img/loading.gif" lazyload></div><div class="group-image-wrap"><img src="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp" srcset="/blog/img/loading.gif" lazyload></div></div></div>
-
-<h3 id="脚注"><a href="#脚注" class="headerlink" title="脚注"></a>脚注</h3><p>以下是脚注演示<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="脚注演示">[1]</span></a></sup>：</p>
-<p>如果你有 Fluid 主题或 Hexo 博客相关的文章，可以通过 Pull Request 方式投稿<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="投稿具体详见[https://github.com/fluid-dev/hexo-fluid-blog](https://github.com/fluid-dev/hexo-fluid-blog)">[2]</span></a></sup>。</p>
-<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>脚注演示
-<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li><li><span id="fn:2" class="footnote-text"><span>投稿具体详见<a target="_blank" rel="noopener" href="https://github.com/fluid-dev/hexo-fluid-blog">https://github.com/fluid-dev/hexo-fluid-blog</a>
-<a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
                 
               </div>
             
@@ -473,7 +372,7 @@ Class08 &lt;--&gt; C2: Cool label
     
       <span class="category-chain">
         
-  <a href="/blog/categories/%E4%B8%BB%E9%A2%98%E7%A4%BA%E4%BE%8B/" class="category-chain-item">主题示例</a>
+  <a href="/blog/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
   
   
 
@@ -488,9 +387,7 @@ Class08 &lt;--&gt; C2: Cool label
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/blog/tags/%E7%A4%BA%E4%BE%8B/">#示例</a>
-      
-        <a href="/blog/tags/Fluid/">#Fluid</a>
+        <a href="/blog/tags/%E7%BD%91%E7%BB%9C/">#网络</a>
       
     </div>
   
@@ -502,20 +399,20 @@ Class08 &lt;--&gt; C2: Cool label
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Hello Fluid</div>
-      <div>https://retech-fe.github.io/blog/2020/04/22/hello-fluid/</div>
+      <div>域名解析 | A记录 ，CNAME，MX你懂了吗？</div>
+      <div>https://retech-fe.github.io/blog/2022/08/23/dns-cname/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>作者</div>
-          <div>Re:Tech FE</div>
+          <div>pengfei.zuo</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2020年4月22日</div>
+          <div>2022年8月23日</div>
         </div>
       
       
@@ -545,15 +442,15 @@ Class08 &lt;--&gt; C2: Cool label
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2021/04/20/hexo-netlify/" title="Hexo Netlify CMS 在线编辑博客">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Hexo Netlify CMS 在线编辑博客</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/blog/2022/08/05/mock-new%20/" title="JavaScript中new操作符的原理">
+                        <span class="hidden-mobile">JavaScript中new操作符的原理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
