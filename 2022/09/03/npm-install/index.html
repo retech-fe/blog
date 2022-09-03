@@ -13,35 +13,29 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="Re:Tech FE">
+  <meta name="author" content="pengfei.zuo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="欢迎体验 Fluid ，这是一款 Material Design 风格的 Hexo 主题，以简约的设计帮助你专注于写作，本篇文章可预览主题的样式及功能。">
+    <meta name="description" content="如何减少npm install的时间，从而缩短部署时间，提高产品交付效率。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello Fluid">
-<meta property="og:url" content="https://retech-fe.github.io/blog/2020/04/22/hello-fluid/index.html">
+<meta property="og:title" content="在生产环境中使你的 npm i 速度提升 50%">
+<meta property="og:url" content="https://retech-fe.github.io/blog/2022/09/03/npm-install/index.html">
 <meta property="og:site_name" content="Re:Tech FE Blog">
-<meta property="og:description" content="欢迎体验 Fluid ，这是一款 Material Design 风格的 Hexo 主题，以简约的设计帮助你专注于写作，本篇文章可预览主题的样式及功能。">
+<meta property="og:description" content="如何减少npm install的时间，从而缩短部署时间，提高产品交付效率。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/post.png?w=1280&fmt=webp">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp">
-<meta property="og:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp">
-<meta property="article:published_time" content="2020-04-22T22:22:22.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/09/03/09-38-21-131c7d3d678f5e347fe2f889b4e6418f-20220903093820-10b48a.png">
+<meta property="article:published_time" content="2022-09-03T11:56:02.000Z">
 <meta property="article:modified_time" content="2022-09-03T04:04:46.994Z">
 <meta property="article:author" content="Re:Tech FE">
-<meta property="article:tag" content="示例">
-<meta property="article:tag" content="Fluid">
+<meta property="article:tag" content="CICD">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://rmt.dogedoge.com/fetch/fluid/storage/post.png?w=1280&fmt=webp">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/09/03/09-38-21-131c7d3d678f5e347fe2f889b4e6418f-20220903093820-10b48a.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Hello Fluid - Re:Tech FE Blog</title>
+  <title>在生产环境中使你的 npm i 速度提升 50% - Re:Tech FE Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -233,7 +227,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Hello Fluid"></span>
+            <span id="subtitle" data-typed-text="在生产环境中使你的 npm i 速度提升 50%"></span>
           
         </div>
 
@@ -243,14 +237,14 @@
     
       <span class="post-meta mr-2">
         <i class="iconfont icon-author" aria-hidden="true"></i>
-        Re:Tech FE
+        pengfei.zuo
       </span>
     
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2020-04-22 22:22" pubdate>
-          2020年4月22日 晚上
+        <time datetime="2022-09-03 11:56" pubdate>
+          2022年9月3日 中午
         </time>
       </span>
     
@@ -318,144 +312,67 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Hello Fluid</h1>
+            <h1 style="display: none">在生产环境中使你的 npm i 速度提升 50%</h1>
             
             
               <div class="markdown-body">
                 
-                <blockquote>
-<p>欢迎体验 <a target="_blank" rel="noopener" href="https://github.com/fluid-dev/hexo-theme-fluid">Fluid</a> ，这是一款 Material Design 风格的 Hexo 主题，以简约的设计帮助你专注于写作，本篇文章可预览主题的样式及功能。</p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>纯前端<code>Web</code>应用或<code>Node</code> 应用，在 <code>CICD pipeline</code> 中，无论是构建、测试、部署，通常第一步就是依赖安装: <code>npm i</code>。但是通常<code>npm i</code> 是耗时最长的一个环节。</p>
+<p>如果依赖安装时间变短，就能极大地缩短部署时间，从而提高产品交付效率。</p>
+<p><code>CI</code> 环境中的优化通常指的是生产环境: </p>
+<p>在本地环境中安装依赖是有状态的，如 <code>node_modules</code>，<code>~/.npmrc</code>，<code>~/.npm</code> 一系列硬盘目录及文件，无不构成状态。</p>
+<p>而在生产环境中，往往结合 <code>CICD</code> 工具，每次分配的 <code>Runner</code> 不一定是一台服务器(容器)，往往被视为无状态，因而无法有效利用缓存而导致 <code>CI</code> 中部署用时过长。</p>
+<p>但也正因为 <code>CICD Runner</code> 的无状态化，这意味着你只要参考构建脚本，如 .<code>gitlab-ci.yaml</code>，<code>.travis.yaml</code> 或者 <code>.github/workflows/deploy.yaml</code>，就可以从零把项目跑起来，而避免过多在熟悉新项目时求助他人。</p>
+<p>不同的部署方式，不同的持续集成工具有不同的实践方法，但优化的原理大同小异。</p>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/09/03/09-38-21-131c7d3d678f5e347fe2f889b4e6418f-20220903093820-10b48a.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h2 id="只安装生产环境使用的库"><a href="#只安装生产环境使用的库" class="headerlink" title="只安装生产环境使用的库"></a>只安装生产环境使用的库</h2><p><code>npm install</code> 的速度显然与它依赖的包的多少是正相关的，那减少包的数量就可以减少装包所花费的时间。</p>
+<p>使用 <code>--production</code> 可以只安装 <code>package.json</code> 中 <code>dependencies</code> 中的依赖项，只把要安装在 <code>CI</code> 中需要使用到的依赖。在生产环境部署时可以指定 <code>--production</code>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm install --production<br></code></pre></td></tr></table></figure>
+
+<p>另外，通过设置环境变量 <code>NODE_ENV=production</code> 相当于指定 <code>--production</code>，测试如下:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">NODE_ENV=production npm config get production</span><br>true<br></code></pre></td></tr></table></figure>
+
+<p>这需要我们根据到底是开发环境使用还是生产环境使用，从而把 <code>packages</code> 分拣到 <code>devDependencies</code> 与 <code>dependencies</code> 中。</p>
+<h2 id="使用私有镜像仓库"><a href="#使用私有镜像仓库" class="headerlink" title="使用私有镜像仓库"></a>使用私有镜像仓库</h2><p>从 <code>npm</code> 的官方仓库可以发布与拉取 <code>package</code>，比如 <code>react</code>，<code>vue</code> 和 <code>express</code> 都发布在官方仓库中。官方 <code>registory</code> 地址是 <code>https://registry.npmjs.org/</code>，这对国内的前端应用来说，由于远在国外，远程仓库的服务器时延过大，此时的瓶颈在于网络。</p>
+<p>国内的公有镜像库，如淘宝镜像，它每隔十分钟与官方镜像仓库同步一次，而它位于国内，网络也很快。</p>
+<p>对于企业级项目的生产环境来说，在集群内部搭建私有仓库是一个更好的选择，也更能缩短时延。 流量能在局域网完成的，就不需要去互联网中溜圈了。</p>
+<p>使用 <code>npm config</code> 来设置 <code>npm</code> 仓库，它将把仓库信息写入 <code>~/.npmrc </code>中，这足以适用于<code>CICD</code> 中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm config set registry https://registry.npm.peffy.tech/<br></code></pre></td></tr></table></figure>
+
+<h2 id="利用缓存"><a href="#利用缓存" class="headerlink" title="利用缓存"></a>利用缓存</h2><p><code>npm install</code>不能慢两次；正如 <code>http cache</code> 一样，<code>npm install</code> 也可以充分利用缓存，npm 的缓存在 <code>linux</code> 系统中存在于以下路径:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">~/.npm<br></code></pre></td></tr></table></figure>
+
+<p>命令 <code>npm cache verify</code> 可以校验缓存，如下所示:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">npm cache verify</span><br>Cache verified and compressed (~/.npm/_cacache):<br>Content verified: 4415 (156612117 bytes)<br>Index entries: 6239<br>Finished in 14.017s<br></code></pre></td></tr></table></figure>
+
+<p>结合 <code>npm install --prefer-offline</code> 缓存优先策略充分利用缓存</p>
+<p>但是有一个悖论，在 <code>CI</code> 中是无状态的: 你本次装的 <code>node_modules</code> 和生成的 <code>~/.npm</code> 将会在下次装包时丢失。</p>
+<p>这时候就需要利用 <code>CI</code> 的缓存功能，如以下是 <code>travis ci</code> 的配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">install:<br>- npm ci<br><span class="hljs-meta prompt_"># </span><span class="language-bash">keep the npm cache around to speed up installs</span><br>cache:<br>  directories:<br>  - &quot;$HOME/.npm&quot;<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="progress-屏蔽非必要打印信息"><a href="#progress-屏蔽非必要打印信息" class="headerlink" title="progress: 屏蔽非必要打印信息"></a>progress: 屏蔽非必要打印信息</h2><p>当设置 <code>progress</code> 为 <code>true</code> 时，<code>npm install</code> 时将会显示进度条，把它设置为 <code>false</code> 可小幅提高 <code>npm install</code> 的速度。</p>
+<p>修改设置:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros">npm <span class="hljs-built_in">set</span> <span class="hljs-attribute">progress</span>=<span class="hljs-literal">false</span><br><br></code></pre></td></tr></table></figure>
+
+<p>在<a target="_blank" rel="noopener" href="https://docs.npmjs.com/cli/v8/using-npm/config">官方文档中</a>对 progress 有以下介绍：</p>
+<blockquote>
+<p>Default: true, unless TRAVIS or CI env vars set. Type: Boolean</p>
 </blockquote>
-<span id="more"></span>
+<p>因此，只需要在构建服务器中简单设置一个 <code>CI=true</code> 的环境变量即可以很轻便地解决问题</p>
+<h2 id="使用-npm-ci-替代-npm-i"><a href="#使用-npm-ci-替代-npm-i" class="headerlink" title="使用 npm ci 替代 npm i"></a>使用 npm ci 替代 npm i</h2><p>单看名字，里边有个 <code>CI</code>，它就像适用在 <code>CI</code> 中，事实也如此。它在 <code>CI</code> 环境中做了一系列优化，如去除掉一些面向用户的特性来加强速度。除了性能，它也有一些在 <code>CI</code> 上基于完整性与安全性的检查，如 <code>package.json</code> 与 <code>package-lock.json</code> 版本不一致的问题。</p>
+<p>为了更好地提高速度，<code>npm ci</code> 基于一个独立的库<a target="_blank" rel="noopener" href="https://github.com/npm/libcipm">libcipm</a>安装依赖，而它拥有和 <code>npm install</code> 兼容的 <code>API</code>。并且当它安装依赖时，默认是缓存优先的，它会充分利用缓存，从而加速装包。</p>
+<p>经实验，<code>npm ci</code> 可以减少将近一半的的依赖安装时间。</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">$ npm <span class="hljs-keyword">install</span><br><span class="hljs-keyword"></span><span class="hljs-keyword">added </span><span class="hljs-number">1154</span> packages in <span class="hljs-number">60</span>s<br><br>$ npm ci<br><span class="hljs-keyword">added </span><span class="hljs-number">1154</span> packages in <span class="hljs-number">35</span>s<br></code></pre></td></tr></table></figure>
 
-<h2 id="文字"><a href="#文字" class="headerlink" title="文字"></a>文字</h2><p>文章大部分使用的是 github-markdown 样式，并加入了一些 Material 风格。</p>
-<h3 id="H3-标题"><a href="#H3-标题" class="headerlink" title="H3 标题"></a>H3 标题</h3><h4 id="H4-标题"><a href="#H4-标题" class="headerlink" title="H4 标题"></a>H4 标题</h4><p><strong>粗体</strong></p>
-<p><em>斜体</em></p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>行内代码：<code>$ hexo new post &quot;My New Post&quot;</code></p>
-<p>代码高亮使用的是 highlight.js，支持 185 种语言和 91 种高亮样式：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">fib</span>(<span class="hljs-params">n</span>):<br>    a, b = <span class="hljs-number">0</span>, <span class="hljs-number">1</span><br>    <span class="hljs-keyword">while</span> a &lt; n:<br>        <span class="hljs-built_in">print</span>(a, end=<span class="hljs-string">&#x27; &#x27;</span>)<br>        a, b = b, a+b<br>    <span class="hljs-built_in">print</span>()<br>fib(<span class="hljs-number">1000</span>)<br></code></pre></td></tr></table></figure>
-
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> Map <span class="hljs-keyword">struct</span> &#123;<br>    mu Mutex<br>    read atomic.Value<br>    dirty <span class="hljs-keyword">map</span>[<span class="hljs-keyword">interface</span>&#123;&#125;]*entry<br>    misses <span class="hljs-type">int</span><br>&#125;<br></code></pre></td></tr></table></figure>
-
-<h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><table>
-<thead>
-<tr>
-<th>Header 1</th>
-<th>Header 2</th>
-<th>Header 3</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Key 1</td>
-<td>Value 1</td>
-<td>Comment 1</td>
-</tr>
-<tr>
-<td>Key 2</td>
-<td>Value 2</td>
-<td>Comment 2</td>
-</tr>
-<tr>
-<td>Key 3</td>
-<td>Value 3</td>
-<td>Comment 3</td>
-</tr>
-</tbody></table>
-<h2 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h2><h3 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h3><p>Fluid 相较于其他主题的优势：</p>
-<ol>
-<li>设计遵循简洁至上，同时具有轻快的体验，和优雅的颜值；</li>
-<li>提供大量定制化配置项，使每个用户使用该主题都能具有独特的样式；</li>
-<li>响应式页面，适配手机、平板等设备；</li>
-</ol>
-<h3 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h3><p>Fluid 功能特性：</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>最后总结一下如何减少 <code>npm install</code> 的时间，都是很简单的设置，一分钟搞定</p>
 <ul>
-<li>图片懒加载</li>
-<li>自定义代码高亮方案</li>
-<li>内置多语言</li>
-<li>支持多款评论插件</li>
-<li>支持使用数据文件存放配置</li>
-<li>自定义静态资源 CDN</li>
-<li>内置文章搜索</li>
-<li>页脚备案信息</li>
-<li>网页访问统计</li>
-<li>支持 LaTeX 数学公式</li>
-<li>支持 mermaid 流程图</li>
-<li>音乐播放器</li>
+<li>选择时延低的 registry，需要企业技术基础建设支持</li>
+<li>NODE_ENV&#x3D;production，只安装生产环境必要的包(如果 dep 与 devDep 没有仔细分割开来，工作量很大，可以放弃)</li>
+<li>CI&#x3D;true，npm 会在此环境变量下自动优化</li>
+<li>结合 CI 的缓存功能，充分利用 npm cache</li>
+<li>使用 npm ci 代替 npm i，既提升速度又保障应用安全性</li>
 </ul>
-<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p><img src="https://rmt.dogedoge.com/fetch/fluid/storage/post.png?w=1280&fmt=webp" srcset="/blog/img/loading.gif" lazyload></p>
-<h2 id="LaTex"><a href="#LaTex" class="headerlink" title="LaTex"></a>LaTex</h2><p>基于 MathJax 引擎：</p>
-<p>$$<br>\Gamma _ { \epsilon } ( x ) &#x3D; [ 1- e ^ { - 2\pi \epsilon } ] ^ { 1- x } \prod _ { n &#x3D; 0} ^ { \infty } \frac { 1- \operatorname{exp} ( - 2\pi \epsilon ( n + 1) ) } { 1- \operatorname{exp} ( - 2\pi \epsilon ( x + n ) ) }<br>$$</p>
-<p>$$<br>\left( \begin{array} c t ^ { \prime } \ x ^ { \prime } \ y ^ { \prime } \ z ^ { \prime } \end{array} \right) &#x3D; \left( \begin{array} { c c c c } { \gamma } &amp; { - \gamma \beta } &amp; { 0 } &amp; { 0 } \ { - \gamma \beta } &amp; { \gamma } &amp; { 0 } &amp; { 0 } \ { 0 } &amp; { 0 } &amp; { 1 } &amp; { 0 } \ { 0 } &amp; { 0 } &amp; { 0 } &amp; { 1 } \end{array} \right) \left( \begin{array} c t \ x \ y \ z \end{array} \right)<br>$$</p>
-<p>$$<br>6 \mathrm { CO } _ { 2 } + 6 \mathrm { H } _ { 2 } \mathrm { O } \rightarrow \mathrm { C } _ { 6 } \mathrm { H } _ { 12 } \mathrm { O } _ { 6 } + 6 \mathrm { O } _ { 2 }<br>$$</p>
-<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p>基于 mermaid 语法：</p>
-<pre><code class=" mermaid">sequenceDiagram
-participant Alice
-participant Bob
-Alice-&gt;&gt;John: Hello John, how are you?
-loop Healthcheck
-    John-&gt;&gt;John: Fight against hypochondria
-end
-Note right of John: Rational thoughts &lt;br/&gt;prevail...
-John--&gt;&gt;Alice: Great!
-John-&gt;&gt;Bob: How about you?
-Bob--&gt;&gt;John: Jolly good!
-</code></pre>
 
-<pre><code class=" mermaid">gantt
-dateFormat  YYYY-MM-DD
-title Adding GANTT diagram to mermaid
-
-section A section
-Completed task            :done,    des1, 2014-01-06,2014-01-08
-Active task               :active,  des2, 2014-01-09, 3d
-Future task               :         des3, after des2, 5d
-Future task2               :         des4, after des3, 5d
-</code></pre>
-
-<pre><code class=" mermaid">classDiagram
-Class01 &lt;|-- AveryLongClass : Cool
-Class03 *-- Class04
-Class05 o-- Class06
-Class07 .. Class08
-Class09 --&gt; C2 : Where am i?
-Class09 --* C3
-Class09 --|&gt; Class07
-Class07 : equals()
-Class07 : Object[] elementData
-Class01 : size()
-Class01 : int chimp
-Class01 : int gorilla
-Class08 &lt;--&gt; C2: Cool label
-</code></pre>
-
-<h2 id="内置-Tag-插件"><a href="#内置-Tag-插件" class="headerlink" title="内置 Tag 插件"></a>内置 Tag 插件</h2><p>内置了一些 Tag 插件，用于实现 Markdown 不容易生成的样式，具体使用方式请见 <a target="_blank" rel="noopener" href="https://hexo.fluid-dev.com/docs/guide/#tag-%E6%8F%92%E4%BB%B6">用户指南</a>。</p>
-<h3 id="便签"><a href="#便签" class="headerlink" title="便签"></a>便签</h3><div class="note note-info">
-            <p>这里可以写文字 或者 <code>markdown</code></p>
-          </div>
-
-<div class="note note-warning">
-            <p>这里可以写文字 或者 <code>markdown</code></p>
-          </div>
-
-<div class="note note-primary">
-            <p>这里可以写文字 或者 <code>markdown</code></p>
-          </div>
-
-<h3 id="行内标签"><a href="#行内标签" class="headerlink" title="行内标签"></a>行内标签</h3><span class="label label-info">行内标签</span> <span class="label label-warning">行内标签</span> <span class="label label-primary">行内标签</span>
-
-<h3 id="勾选框"><a href="#勾选框" class="headerlink" title="勾选框"></a>勾选框</h3><div>
-            <input type="checkbox" disabled checked="checked">主要是解决一些 Renderer 不支持勾选
-          </div>
-
-<h3 id="按钮"><a href="#按钮" class="headerlink" title="按钮"></a>按钮</h3><a class="btn" href="javascript:;"  target="_blank">支持链接</a>
-
-<h3 id="组图"><a href="#组图" class="headerlink" title="组图"></a>组图</h3><div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp" srcset="/blog/img/loading.gif" lazyload></div><div class="group-image-wrap"><img src="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp" srcset="/blog/img/loading.gif" lazyload></div><div class="group-image-wrap"><img src="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp" srcset="/blog/img/loading.gif" lazyload></div></div><div class="group-image-row"><div class="group-image-wrap"><img src="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp" srcset="/blog/img/loading.gif" lazyload></div><div class="group-image-wrap"><img src="https://rmt.dogedoge.com/fetch/fluid/storage/hello-fluid/cover.png?w=480&fmt=webp" srcset="/blog/img/loading.gif" lazyload></div></div></div>
-
-<h3 id="脚注"><a href="#脚注" class="headerlink" title="脚注"></a>脚注</h3><p>以下是脚注演示<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="脚注演示">[1]</span></a></sup>：</p>
-<p>如果你有 Fluid 主题或 Hexo 博客相关的文章，可以通过 Pull Request 方式投稿<sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="投稿具体详见[https://github.com/fluid-dev/hexo-fluid-blog](https://github.com/fluid-dev/hexo-fluid-blog)">[2]</span></a></sup>。</p>
-<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span>脚注演示
-<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li><li><span id="fn:2" class="footnote-text"><span>投稿具体详见<a target="_blank" rel="noopener" href="https://github.com/fluid-dev/hexo-fluid-blog">https://github.com/fluid-dev/hexo-fluid-blog</a>
-<a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
                 
               </div>
             
@@ -473,7 +390,7 @@ Class08 &lt;--&gt; C2: Cool label
     
       <span class="category-chain">
         
-  <a href="/blog/categories/%E4%B8%BB%E9%A2%98%E7%A4%BA%E4%BE%8B/" class="category-chain-item">主题示例</a>
+  <a href="/blog/categories/DevOps/" class="category-chain-item">DevOps</a>
   
   
 
@@ -488,9 +405,7 @@ Class08 &lt;--&gt; C2: Cool label
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/blog/tags/%E7%A4%BA%E4%BE%8B/">#示例</a>
-      
-        <a href="/blog/tags/Fluid/">#Fluid</a>
+        <a href="/blog/tags/CICD/">#CICD</a>
       
     </div>
   
@@ -502,20 +417,20 @@ Class08 &lt;--&gt; C2: Cool label
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Hello Fluid</div>
-      <div>https://retech-fe.github.io/blog/2020/04/22/hello-fluid/</div>
+      <div>在生产环境中使你的 npm i 速度提升 50%</div>
+      <div>https://retech-fe.github.io/blog/2022/09/03/npm-install/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>作者</div>
-          <div>Re:Tech FE</div>
+          <div>pengfei.zuo</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2020年4月22日</div>
+          <div>2022年9月3日</div>
         </div>
       
       
@@ -545,15 +460,15 @@ Class08 &lt;--&gt; C2: Cool label
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2021/04/20/hexo-netlify/" title="Hexo Netlify CMS 在线编辑博客">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Hexo Netlify CMS 在线编辑博客</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/blog/2022/08/28/docker-cicd/" title="如何使用 docker 部署前端项目">
+                        <span class="hidden-mobile">如何使用 docker 部署前端项目</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
