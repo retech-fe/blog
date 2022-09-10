@@ -16,26 +16,24 @@
   <meta name="author" content="pengfei.zuo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="主要讲解使用A记录和CNAME的概念及进行域名解析的区别。">
+    <meta name="description" content="在这篇文章中，对&#96;Docker&#96;中&#96;ADD&#96;和&#96;COPY&#96;的这两个命令进行了解释和对比，你将知道如何选择来使用它们。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="域名解析 | A记录 ，CNAME，MX你懂了吗？">
-<meta property="og:url" content="https://retech-fe.github.io/blog/2022/08/23/dns-cname/index.html">
+<meta property="og:title" content="Docker中ADD和COPY的区别">
+<meta property="og:url" content="https://retech-fe.github.io/blog/2022/09/10/test/index.html">
 <meta property="og:site_name" content="Re:Tech FE Blog">
-<meta property="og:description" content="主要讲解使用A记录和CNAME的概念及进行域名解析的区别。">
+<meta property="og:description" content="在这篇文章中，对&#96;Docker&#96;中&#96;ADD&#96;和&#96;COPY&#96;的这两个命令进行了解释和对比，你将知道如何选择来使用它们。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://files.mdnice.com/user/13996/cd5eff55-8573-4395-8e7f-80d319fc85cf.png">
-<meta property="article:published_time" content="2022-08-23T13:11:02.000Z">
+<meta property="article:published_time" content="2022-09-10T12:05:02.000Z">
 <meta property="article:modified_time" content="2022-09-10T04:07:38.513Z">
 <meta property="article:author" content="Re:Tech FE">
-<meta property="article:tag" content="网络">
+<meta property="article:tag" content="CICD">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://files.mdnice.com/user/13996/cd5eff55-8573-4395-8e7f-80d319fc85cf.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>域名解析 | A记录 ，CNAME，MX你懂了吗？ - Re:Tech FE Blog</title>
+  <title>Docker中ADD和COPY的区别 - Re:Tech FE Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -227,7 +225,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="域名解析 | A记录 ，CNAME，MX你懂了吗？"></span>
+            <span id="subtitle" data-typed-text="Docker中ADD和COPY的区别"></span>
           
         </div>
 
@@ -243,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-08-23 13:11" pubdate>
-          2022年8月23日 下午
+        <time datetime="2022-09-10 12:05" pubdate>
+          2022年9月10日 中午
         </time>
       </span>
     
@@ -266,7 +264,7 @@
         
         
         
-          15 分钟
+          14 分钟
         
       </span>
     
@@ -312,48 +310,52 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">域名解析 | A记录 ，CNAME，MX你懂了吗？</h1>
+            <h1 style="display: none">Docker中ADD和COPY的区别</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h2><p>什么是域名解析？</p>
-<p>域名解析就是国际域名、国内域名、中文域名等域名申请后做的到IP地址的转换过程。IP地址是网路上标识您站点的数字地址，为了简单好记，采用域名来代替ip地址标识站点地址。域名的解析工作由<code>DNS</code>服务器完成。</p>
-<p>如下图，百度 <code>www.baidu.com</code> 就是域名，解析出来的<code>IP</code> <code>39.156.66.10</code> 这个过程就是域名解析。<br><img src="https://files.mdnice.com/user/13996/cd5eff55-8573-4395-8e7f-80d319fc85cf.png" srcset="/blog/img/loading.gif" lazyload></p>
-<h2 id="A-记录"><a href="#A-记录" class="headerlink" title="A 记录"></a>A 记录</h2><p><code>A (Address)记录</code>是用来指定主机名（或域名）对应的IP地址记录。用户可以将该域名下的网站服务器指向到自己的<code>web server</code>上。同时也可以设置您域名的二级域名。</p>
-<p>又称IP指向，用户可以在此设置子域名并指向到自己的目标主机地址上，从而实现通过域名找到服务器。</p>
-<p>  指向的目标主机地址类型只能使用IP地址；</p>
-<ul>
-<li>1.如何添加A记录</li>
-</ul>
-<p>  在“主机名”中填入子域的名字，“类型”为A，“IP地址&#x2F;主机名”中填入web服务器的IP地址，点击“新增”按钮即可。</p>
-<p>  注：如果“主机名”一栏为空则表示对域名mydomain.com本身做指向。</p>
-<ul>
-<li>2.泛域名解析</li>
-</ul>
-<p>  即将该域名所有未指定的子域名都指向一个空间。</p>
-<p>  在“主机名”中填入*，“类型”为A，“IP地址&#x2F;主机名”中填入web服务器的IP地址。</p>
-<h2 id="CNAME记录"><a href="#CNAME记录" class="headerlink" title="CNAME记录"></a>CNAME记录</h2><p>  通常称别名指向。</p>
-<p>  这种记录允许您将多个名字映射到另外一个域名。</p>
-<p>  您可以为一个主机设置别名。比如设置test.mydomain.com，用来指向一个主机<a target="_blank" rel="noopener" href="http://www.rddns.com那么以后就可以用test.mydomain.com来代替访问www.rddns.com了./">www.rddns.com那么以后就可以用test.mydomain.com来代替访问www.rddns.com了。</a></p>
-<p>  - CNAME的目标主机地址只能使用主机名，不能使用IP地址；</p>
-<p>  - 主机名前不能有任何其他前缀，如：http:&#x2F;&#x2F;等是不被允许的；</p>
-<p>  - A记录优先于CNAME记录。即如果一个主机地址同时存在A记录和CNAME记录，则CNAME记录不生效。
- </p>
-<h2 id="MX-记录"><a href="#MX-记录" class="headerlink" title="MX 记录"></a>MX 记录</h2><p>  邮件交换记录。</p>
-<p>  用于将以该域名为结尾的电子邮件指向对应的邮件服务器以进行处理。如：用户所用的邮件是以域名mydomain.com为结尾的，则需要在管理界面中添加该域名的MX记录来处理所有以@mydomain.com结尾的邮件。</p>
-<p>  - MX记录可以使用主机名或IP地址；</p>
-<p>  - MX记录可以通过设置优先级实现主辅服务器设置，“优先级”中的数字越小表示级别越高。也可以使用相同优先级达到负载均衡的目的；</p>
-<p>  - 如果在“主机名”中填入子域名则此MX记录只对该子域名生效。
- </p>
-<h2 id="使用A记录和CNAME进行域名解析的区别"><a href="#使用A记录和CNAME进行域名解析的区别" class="headerlink" title="使用A记录和CNAME进行域名解析的区别?"></a>使用A记录和CNAME进行域名解析的区别?</h2><p>A记录就是把一个域名解析到一个IP地址（Address，特制数字IP地址），而CNAME记录就是把域名解析到另外一个域名。</p>
-<p>其功能是差不多，CNAME将几个主机名指向一个别名，其实跟指向IP地址是一样的，因为这个别名也要做一个A记录的。</p>
-<p>但是使用CNAME记录可以很方便地变更IP地址。如果一台服务器有100个网站，他们都做了别名，该台服务器变更IP时，只需要变更别名的A记录就可以了。</p>
-<h2 id="使用A记录和CNAME哪个好？"><a href="#使用A记录和CNAME哪个好？" class="headerlink" title="使用A记录和CNAME哪个好？"></a>使用A记录和CNAME哪个好？</h2><p>域名解析CNAME记录A记录哪一种比较好？</p>
-<p>如果论对网站的影响，就没有多大区别。但是：CNAME有一个好处就是稳定，就好像一个IP与一个域名的区别。服务商从方便维护的角度，一般也建议用户使用CNAME记录绑定域名的。如果主机使用了双线IP，显然使用CNAME也要方便一些。</p>
-<p>A记录也有一些好处，例如可以在输入域名时不用输入WWW.来访问网站哦！从SEO优化角度来看，一些搜索引擎如alex或一些搜索查询工具网站等等则默认是自动去掉WWW.来辨别网站，CNAME记录是必须有如：WWW(别名)前缀的域名，有时候会遇到这样的麻烦，前缀去掉了默认网站无法访问。</p>
-<p>有人认为，在SEO优化网站的时候，由于搜索引擎找不到去掉WWW.的域名时，对网站权重也会有些影响。因为有些网民客户也是不喜欢多写三个W来访问网站的，网站无法访问有少量网民客户会放弃继续尝试加WWW.访问域名了，因此网站访问浏览量也会减少一些。</p>
-<p>也有人认为同一个域名加WWW.和不加WWW.访问网站也会使网站权重分散，这也是个问题。但是可以使用301跳转把不加WWW.跳转到加WWW.的域名，问题就解决了</p>
+                <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>当我们在使用<code>Dockerfile</code>创建镜像时，你可以使用两个命令来进行文件或者目录的复制：<code>ADD</code>和<code>COPY</code>。它们的用途基本上是一致的除了有一些小的不同点。</p>
+<p>于是，为什么会有两个命令呢？我们在什么情况下使用它们呢？</p>
+<p>在这篇文章中，会对每个命令进行解释以及分析<code>Docker</code>中<code>ADD</code>和<code>COPY</code>的对比，你将知道如何选择来使用它们。</p>
+<h2 id="Docker-ADD-命令"><a href="#Docker-ADD-命令" class="headerlink" title="Docker ADD 命令"></a>Docker ADD 命令</h2><p><code>ADD</code> 指令在<code>Docker</code>平台出现得比较早，在早期就已经是命令集合中的一员了。<code>ADD</code>主要是复制文件和目录到特定容器下的文件系统中。</p>
+<p><code>ADD</code>命令的基本语法如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">ADD <span class="hljs-tag">&lt;<span class="hljs-name">src</span>&gt;</span> … <span class="hljs-tag">&lt;<span class="hljs-name">dest</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="复制文件"><a href="#复制文件" class="headerlink" title="复制文件"></a>复制文件</h3><p>它包含你想要复制的源文件（<code>src</code>）以及你需要存储的目的地（<code>dest</code>）。如果给定的<code>src</code>是一个目录的话，<code>ADD</code>命令将会复制目录下的所有文件。</p>
+<p>例如，如果文件存在于本地，并且你想要复制到一个目录，你可以这样：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle">ADD <span class="hljs-regexp">/source/</span><span class="hljs-keyword">file</span><span class="hljs-regexp">/path  /</span>destination/path<br></code></pre></td></tr></table></figure>
+
+<h3 id="远程复制文件"><a href="#远程复制文件" class="headerlink" title="远程复制文件"></a>远程复制文件</h3><p><code>ADD</code>命令同时也支持从一个远程地址复制文件。它将会从远程下载文件，并且复制到容器内的文件系统，例如：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">ADD http:<span class="hljs-regexp">//</span>source.file<span class="hljs-regexp">/url  /</span>destination/path<br></code></pre></td></tr></table></figure>
+
+<h3 id="本地解压文件并复制文件"><a href="#本地解压文件并复制文件" class="headerlink" title="本地解压文件并复制文件"></a>本地解压文件并复制文件</h3><p>如下，指定本地的压缩文件，以及要复制的容器目标文件系统路径即可：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">ADD source<span class="hljs-selector-class">.file</span><span class="hljs-selector-class">.tar</span><span class="hljs-selector-class">.gz</span> /temp<br></code></pre></td></tr></table></figure>
+
+<p>这里需要注意的是，你不能从远程地址下载和解压缩文件或者目录。</p>
+<h2 id="Docker-COPY命令"><a href="#Docker-COPY命令" class="headerlink" title="Docker COPY命令"></a>Docker COPY命令</h2><p>基于有些功能问题，<code>Docker</code>不得不增加另外的命令来复制内容，也就是<code>COPY</code>命令。</p>
+<p>不同于<code>ADD</code>命令，<code>COPY</code>指令仅仅只有一个功能。它的角色就是复制本地的文件或者目录到容器的文件系统。也就意味着它不会去解压缩一个压缩的文件，仅仅只是复制而已。</p>
+<p>这个指令只能用在处理本地的文件。也就是说，你不能用它来复制远程路径的文件到容器内。</p>
+<p>下面是使用 <code>COPY</code> 命令的基本语法：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">COPY <span class="hljs-tag">&lt;<span class="hljs-name">src</span>&gt;</span> … <span class="hljs-tag">&lt;<span class="hljs-name">dest</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>For example:</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">COPY</span> <span class="hljs-regexp">/source/</span><span class="hljs-keyword">file</span><span class="hljs-regexp">/path  /</span>destination/path<br></code></pre></td></tr></table></figure>
+
+<h2 id="Docker-Copy-vs-ADD"><a href="#Docker-Copy-vs-ADD" class="headerlink" title="Docker Copy vs ADD"></a>Docker Copy vs ADD</h2><p>那为什么<code>Docker</code>需要添加一个新的，并且相近的命令？</p>
+<p>事实就是 <code>ADD</code> 命令在实践过程中有很多的功能问题出现，并且它极其的不可预测。这个不稳定的表现结果经常是出现在你复制内容的时候，到底是需要压缩的内容还是解压缩内容。</p>
+<p><code>Docker</code>由于有很多存在的用途，并不能完全替代 <code>ADD</code> 命令。同时，为了向后兼容，最好的稳妥做法就是添加 <code>COPY</code> 命令。</p>
+<h3 id="到底如何选择？"><a href="#到底如何选择？" class="headerlink" title="到底如何选择？"></a>到底如何选择？</h3><p>Docker的官方文件有提到，应当尽可能的使用 <code>COPY</code>，原因是相对于 <code>ADD</code>，它的使用更加透明。</p>
+<p>如果你需要复制本地的内容到容器内，最好用 <code>COPY</code>。</p>
+<p><code>Docker</code>团队同时也强烈建议不要使用 <code>ADD</code> 来下载和复制远程地址文件，而是使用更加安全和高效地通过 <code>RUN</code> 命令来使用 <code>wget</code> 或者 <code>curl</code> 达到同样的功能。如果这样操作的话，你将避免创建新的镜像层，以及减少镜像大小。</p>
+<p>例如，你想要下载远程地址的一个压缩文件，解压缩内容，并在最后清除下载包。</p>
+<p>使用 <code>ADD</code> 的方式：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gradle">ADD http:<span class="hljs-comment">//source.file/package.file.tar.gz /temp</span><br>RUN tar -xjf <span class="hljs-regexp">/temp/</span><span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz \<br>  &amp;&amp; make -C <span class="hljs-regexp">/tmp/</span><span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span> \<br>  &amp;&amp; rm <span class="hljs-regexp">/tmp/</span> <span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz<br></code></pre></td></tr></table></figure>
+
+<p>你应该这样做：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gradle">RUN curl http:<span class="hljs-comment">//source.file/package.file.tar.gz \</span><br>  | tar -xjC <span class="hljs-regexp">/tmp/</span> <span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz \<br>  &amp;&amp; make -C <span class="hljs-regexp">/tmp/</span> <span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz<br></code></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总结来说，尽量使用 <code>COPY</code> 命令。就像<code>Docker</code>官方的建议一样，尽量避免使用 <code>ADD</code> 命令，除非你需要复制一个本地压缩文件并在容器内进行解压缩。</p>
 
                 
               </div>
@@ -372,7 +374,7 @@
     
       <span class="category-chain">
         
-  <a href="/blog/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  <a href="/blog/categories/DevOps/" class="category-chain-item">DevOps</a>
   
   
 
@@ -387,7 +389,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/blog/tags/%E7%BD%91%E7%BB%9C/">#网络</a>
+        <a href="/blog/tags/CICD/">#CICD</a>
       
     </div>
   
@@ -399,8 +401,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>域名解析 | A记录 ，CNAME，MX你懂了吗？</div>
-      <div>https://retech-fe.github.io/blog/2022/08/23/dns-cname/</div>
+      <div>Docker中ADD和COPY的区别</div>
+      <div>https://retech-fe.github.io/blog/2022/09/10/test/</div>
     </div>
     <div class="license-meta">
       
@@ -412,7 +414,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年8月23日</div>
+          <div>2022年9月10日</div>
         </div>
       
       
@@ -442,18 +444,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2022/08/28/docker-cicd/" title="如何使用 docker 部署前端项目">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">如何使用 docker 部署前端项目</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2022/08/05/mock-new%20/" title="JavaScript中new操作符的原理">
-                        <span class="hidden-mobile">JavaScript中new操作符的原理</span>
+                      <a href="/blog/2022/09/03/npm-install/" title="在生产环境中使你的 npm i 速度提升 50%">
+                        <span class="hidden-mobile">在生产环境中使你的 npm i 速度提升 50%</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
