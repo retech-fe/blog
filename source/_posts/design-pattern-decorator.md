@@ -4,7 +4,7 @@ date: 2022-10-02 10:07:02
 categories: design pattern
 tags: design pattern
 excerpt: 在这篇文章中，对设计模式中的装饰器模式从定义、类图、代码优化过程、应用场景、优缺点进行了详细的阐释。
-author: hongxiang.gao
+author: pengfei.zuo
 ---
 
 ## 什么是装饰器模式
