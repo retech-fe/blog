@@ -81,7 +81,8 @@ angelababyAgent.answerPhone();
 
 ![](https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/10-34-07-84f93fe717c67717f1e3140a88843e60-20221102103407-3b1502.png)
 
-```
+
+```HTML
 <body>
     <ul id="list">
         <li>1</li>
@@ -102,7 +103,7 @@ angelababyAgent.answerPhone();
 
 #### app.js
 
-```
+```JavaScript
 let express=require('express');
 let path=require('path')
 let app=express();
@@ -121,7 +122,7 @@ app.listen(8080);
 ```
 ####  index.html 
 
-```
+```HTML
 <!DOCTYPE html>
 <html lang="en">
 
@@ -196,7 +197,7 @@ app.listen(8080);
 + DOMRect 对象包含了一组用于描述边框的只读属性——left、top、right 和 bottom，单位为像素。除了 width 和 height 外的属性都是相对于视口的左上角位置而言的
 
 
-```
+```JavaScript
 <!DOCTYPE html>
 <html lang="en">
 
@@ -279,7 +280,7 @@ app.listen(8080);
 
 一个正整数的阶乘（factorial）是所有小于及等于该数的正整数的积，并且0的阶乘为1
 
-```
+```JavaScript
 const factorial = function f(num) {
     if (num === 1) {
         return 1;
@@ -308,7 +309,7 @@ console.log(proxyFactorial(5));
 
 指的是这样一个数列：1、1、2、3、5、8、13、21、34。在数学上，斐波那契数列以如下被以递推的方法定义：F(1)=1,F(2)=1,F(n)=F(n-1)+F(n-2)（n>=3，n∈N*）
 
-```
+```JavaScript
 let count = 0;
 function fib(n) {
     count++;
@@ -318,7 +319,7 @@ var result = fib(10);
 console.log(result, count);//55 110
 ```
 
-```
+```JavaScript
 let count = 0;
 const fibWithCache = (function () {
     let cache = {};
@@ -346,7 +347,7 @@ console.log(result, count);//55 17
 
 #### 节流
 
-```
+```HTML
 <!DOCTYPE html>
 <html lang="en">
 
@@ -404,7 +405,7 @@ console.log(result, count);//55 17
 ```
 #### 防抖
 
-```
+```HTML
 <!DOCTYPE html>
 <html lang="en">
 
@@ -457,7 +458,7 @@ console.log(result, count);//55 17
 
 #### 防抖案例 -未防抖
 
-```
+```HTML
 <body>
     <ul id="todos">
     </ul>
@@ -484,7 +485,7 @@ console.log(result, count);//55 17
 
 app.js
 
-```
+```JavaScript
 let express=require('express');
 let app=express();
 app.use(express.static(__dirname));
@@ -513,7 +514,7 @@ app.listen(8080);
 
 todos.html
 
-```
+```HTML
 <body>
     <ul id="todos">
     </ul>
@@ -555,7 +556,7 @@ todos.html
 
 app.js
 
-```
+```JavaScript
 app.get('/toggle/:ids',function (req,res) {
     let ids=req.params.ids;
     ids=ids.split(',').map(item=>parseInt(item));
@@ -588,7 +589,7 @@ app.get('/toggle/:ids',function (req,res) {
 
 proxy-server.js
 
-```
+```JavaScript
 const http = require('http');
 const httpProxy = require('http-proxy');
 //创建一个代理服务
@@ -609,7 +610,7 @@ server.listen(8888, '0.0.0.0');
 
 real-server.js
 
-```
+```JavaScript
 const http = require('http');
 let server = http.createServer(function (req, res) {
     res.end('9999');
@@ -627,22 +628,22 @@ server.listen(9999, '0.0.0.0');
     + otherWindow:其他窗口的一个引用 message:将要发送到其他window的数据
     + message 将要发送到其他window的数据
     + targetOrigin通过窗口的origin属性来指定哪些窗口能接收到消息事件，其值可以是字符串"*"（表示无限制）或者一个URI
-    
- ```
+  
+```JavaScript
 otherWindow.postMessage(message, targetOrigin, [transfer]);
 ````
+
 
 + data 从其他window中传递过来的对象
 + origin 调用postMessage时消息发送方窗口的origin
 + source 对发送消息的窗口对象的引用
 
-```
+```JavaScript
 window.addEventListener("message", receiveMessage, false);
-
 ```
 origin.js
 
-```
+```JavaScript
 let express=require('express');
 let app=express();
 app.use(express.static(__dirname));
@@ -651,7 +652,7 @@ app.listen(3000);
 
 target.js
 
-```
+```JavaScript
 let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
@@ -677,7 +678,7 @@ app.listen(4000);
 
 reg.html
 
-```
+```HTML
 <!DOCTYPE html>
 <html lang="en">
 
@@ -713,7 +714,7 @@ reg.html
 
 target.html
 
-```
+```HTML
 <!DOCTYPE html>
 <html lang="en">
 
@@ -754,7 +755,7 @@ target.html
 + 接受一个函数，然后返回一个新函数，并且这个新函数始终保持了特定的上下文语境。
 + jQuery.proxy( function, context ) function为执行的函数，content为函数的上下文this值会被设置成这个object对象
 
-```
+```HTML
 <!DOCTYPE html>
 <html lang="en">
 
@@ -781,7 +782,7 @@ target.html
 </html>
 ```
 
-```
+```JavaScript
 function proxy(fn, context) {
     return function () {
        return fn.call(context, arguments);
@@ -798,7 +799,7 @@ function proxy(fn, context) {
 +  [Proxy](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy)
 + [defineProperty](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
 
-```
+```JavaScript
 let wang={
     name: 'wanglaoshi',
     age: 29,
