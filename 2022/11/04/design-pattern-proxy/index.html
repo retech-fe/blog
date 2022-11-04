@@ -1,0 +1,922 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/bg/favicon.png">
+  <link rel="icon" href="/blog/img/bg/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="pengfei.zuo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在这篇文章中，对设计模式中的代理模式从定义、类图、应用场景、及和适配器模式和装饰器模式的对比进行了详细的阐释。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式之代理模式">
+<meta property="og:url" content="https://retech-fe.github.io/blog/2022/11/04/design-pattern-proxy/index.html">
+<meta property="og:site_name" content="Re:Tech FE Blog">
+<meta property="og:description" content="在这篇文章中，对设计模式中的代理模式从定义、类图、应用场景、及和适配器模式和装饰器模式的对比进行了详细的阐释。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/10-26-01-64c8ea716b6d0418d34098b70e28a01f-20221102102601-0c2235.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/10-26-49-30dd6b97fd498e2e30966ecda612ce7d-20221102102649-34451f.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/10-31-06-8884ec170ae11170f68b856bd3a7cd74-20221102103105-9cb7fa.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/10-34-07-84f93fe717c67717f1e3140a88843e60-20221102103407-3b1502.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/18-34-19-438745f99bb4afe960201443b2eb9f2c-20221102183418-a1f21d.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/18-36-28-b0dad5d0930e95345e79c6d23c6dd414-fanproxy-f1c368.jpeg">
+<meta property="article:published_time" content="2022-11-04T13:34:02.000Z">
+<meta property="article:modified_time" content="2022-11-04T05:37:09.192Z">
+<meta property="article:author" content="Re:Tech FE">
+<meta property="article:tag" content="design pattern">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/10-26-01-64c8ea716b6d0418d34098b70e28a01f-20221102102601-0c2235.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>设计模式之代理模式 - Re:Tech FE Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"retech-fe.github.io","root":"/blog/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>Re:Tech FE&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blog/img/bg/4.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="设计模式之代理模式"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        pengfei.zuo
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-04 13:34" pubdate>
+          2022年11月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          17k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          146 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">设计模式之代理模式</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><ul>
+<li>由于一个对象不想或者不能直接引用另外一个对象，所以需要通过通过一个称之为“代理”的第三者来实现间接引用</li>
+<li>代理模式就是为目标对象创造一个代理对象，在客户端和目标对象之间起到中介的作用</li>
+<li>这样就可以在代理对象里增加一些逻辑判断、调用前或调用后执行一些操作，从而实现了扩展目标的功能</li>
+<li>并且可以通过代理对象去掉客户不能看到的内容和服务或者添加客户需要的额外服务</li>
+</ul>
+<p>通过引入一个新的对象（如小图片和远程代理对象）来实现对真实对象的操作或者将新的对 象作为真实对象的一个替身，这种实现机制即为代理模式，通过引入代理对象来间接访问一 个对象，这就是代理模式的模式动机。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>代理模式(Proxy Pattern) ：给某一个对象提供一个代理，并由代理对象控制对原对象的引用。代理模式的英 文叫做Proxy或Surrogate，它是一种对象结构型模式。</p>
+<h3 id="生活中的案例："><a href="#生活中的案例：" class="headerlink" title="生活中的案例："></a>生活中的案例：</h3><p>火车票代购、房产中介、律师、海外代购、明星经纪人</p>
+<h2 id="类图和时序图"><a href="#类图和时序图" class="headerlink" title="类图和时序图"></a>类图和时序图</h2><p>代理模式包含如下角色：</p>
+<ul>
+<li>Subject: 抽象主题角色</li>
+<li>Proxy: 代理主题角色</li>
+<li>RealSubject: 真实主题角色</li>
+</ul>
+<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/10-26-01-64c8ea716b6d0418d34098b70e28a01f-20221102102601-0c2235.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h3 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h3><p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/10-26-49-30dd6b97fd498e2e30966ecda612ce7d-20221102102649-34451f.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h2 id="一个例子-明星经纪人"><a href="#一个例子-明星经纪人" class="headerlink" title="一个例子-明星经纪人"></a>一个例子-明星经纪人</h2><p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/10-31-06-8884ec170ae11170f68b856bd3a7cd74-20221102103105-9cb7fa.png" srcset="/blog/img/loading.gif" lazyload></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Star</span> </span>&#123;<br>    <span class="hljs-keyword">abstract</span> answerPhone(): void;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Angelababy</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Star</span> </span>&#123;<br>    public available: boolean = <span class="hljs-literal">true</span>;<br>    answerPhone(): void &#123;<br>        console.log(&#x27;你好,我是<span class="hljs-type">Angelababy</span>.&#x27;);<br>    &#125;<br>&#125;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AngelababyAgent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Star</span> </span>&#123;<br>    constructor(<span class="hljs-keyword">private</span> angelababy: <span class="hljs-type">Angelababy</span>) &#123;<br>        <span class="hljs-keyword">super</span>();<br>    &#125;<br>    answerPhone(): void &#123;<br>        console.log(&#x27;你好,我是<span class="hljs-type">Angelababy</span>的经纪人.&#x27;);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.angelababy.available) &#123;<br>            <span class="hljs-keyword">this</span>.angelababy.answerPhone();<br>        &#125;<br>    &#125;<br>&#125;<br>let angelababyAgent = <span class="hljs-keyword">new</span> <span class="hljs-type">AngelababyAgent</span>(<span class="hljs-keyword">new</span> <span class="hljs-type">Angelababy</span>());<br>angelababyAgent.answerPhone();<br></code></pre></td></tr></table></figure>
+
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><h3 id="事件委托代理"><a href="#事件委托代理" class="headerlink" title="事件委托代理"></a>事件委托代理</h3><ul>
+<li>事件捕获指的是从document到触发事件的那个节点，即自上而下的去触发事件</li>
+<li>事件冒泡是自下而上的去触发事件</li>
+<li>绑定事件方法的第三个参数，就是控制事件触发顺序是否为事件捕获。true为事件捕获；false为事件冒泡,默认false。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/10-34-07-84f93fe717c67717f1e3140a88843e60-20221102103407-3b1502.png" srcset="/blog/img/loading.gif" lazyload></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;list&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>3<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">  <span class="hljs-keyword">let</span> list = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#list&#x27;</span>);</span><br><span class="language-javascript">  list.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>,<span class="hljs-function"><span class="hljs-params">event</span>=&gt;</span>&#123;</span><br><span class="language-javascript">       <span class="hljs-title function_">alert</span>(event.<span class="hljs-property">target</span>.<span class="hljs-property">innerHTML</span>);</span><br><span class="language-javascript">  &#125;);     </span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>    <br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><br></code></pre></td></tr></table></figure>
+
+<h3 id="虚拟代理-图片预加载"><a href="#虚拟代理-图片预加载" class="headerlink" title="虚拟代理(图片预加载)"></a>虚拟代理(图片预加载)</h3><h4 id="app-js"><a href="#app-js" class="headerlink" title="app.js"></a>app.js</h4><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-keyword">let</span> express=require(&#x27;express&#x27;);<br><span class="hljs-keyword">let</span> path=require(&#x27;path&#x27;)<br><span class="hljs-keyword">let</span> app=express<span class="hljs-literal">()</span>;<br>app.get(&#x27;/images/loading.gif&#x27;,<span class="hljs-keyword">function</span> (req,res) &#123;<br>    res.send<span class="hljs-constructor">File(<span class="hljs-params">path</span>.<span class="hljs-params">join</span>(<span class="hljs-params">__dirname</span>,<span class="hljs-params">req</span>.<span class="hljs-params">path</span>)</span>);<br>&#125;);<br>app.get(&#x27;/images/:name&#x27;,<span class="hljs-keyword">function</span><span class="hljs-function"> (<span class="hljs-params">req,</span><span class="hljs-params">res)</span> &#123;</span><br><span class="hljs-function">    <span class="hljs-params">setTimeout(()</span> =&gt;</span> &#123;<br>        res.send<span class="hljs-constructor">File(<span class="hljs-params">path</span>.<span class="hljs-params">join</span>(<span class="hljs-params">__dirname</span>,<span class="hljs-params">req</span>.<span class="hljs-params">path</span>)</span>);<br>    &#125;, <span class="hljs-number">2000</span>);<br>&#125;);<br>app.get(<span class="hljs-character">&#x27;/&#x27;</span>,<span class="hljs-keyword">function</span> (req,res) &#123;<br>    res.send<span class="hljs-constructor">File(<span class="hljs-params">path</span>.<span class="hljs-params">resolve</span>(&#x27;<span class="hljs-params">index</span>.<span class="hljs-params">html</span>&#x27;)</span>);<br>&#125;);<br>app.listen(<span class="hljs-number">8080</span>);<br></code></pre></td></tr></table></figure>
+<h4 id="index-html"><a href="#index-html" class="headerlink" title="index.html"></a>index.html</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;X-UA-Compatible&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;ie=edge&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Document<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css">        <span class="hljs-selector-class">.bg-container</span> &#123;</span><br><span class="language-css">            <span class="hljs-attribute">width</span>: <span class="hljs-number">600px</span>;</span><br><span class="language-css">            <span class="hljs-attribute">height</span>: <span class="hljs-number">400px</span>;</span><br><span class="language-css">            <span class="hljs-attribute">margin</span>: <span class="hljs-number">100px</span> auto;</span><br><span class="language-css">        &#125;</span><br><span class="language-css"></span><br><span class="language-css">        <span class="hljs-selector-class">.bg-container</span> <span class="hljs-selector-id">#bg-image</span> &#123;</span><br><span class="language-css">            <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">            <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">        &#125;</span><br><span class="language-css">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;background&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg1.jpg&quot;</span>&gt;</span>背景1<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg2.jpg&quot;</span>&gt;</span>背景2<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;bg-container&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;bg-image&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/images/bg1.jpg&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">        <span class="hljs-keyword">let</span> container = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#background&#x27;</span>);</span><br><span class="language-javascript"></span><br><span class="language-javascript">        <span class="hljs-keyword">class</span> <span class="hljs-title class_">BackgroundImage</span> &#123;</span><br><span class="language-javascript">            <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) &#123;</span><br><span class="language-javascript">                <span class="hljs-variable language_">this</span>.<span class="hljs-property">bgImage</span> = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#bg-image&#x27;</span>);</span><br><span class="language-javascript">            &#125;</span><br><span class="language-javascript">            <span class="hljs-title function_">setSrc</span>(<span class="hljs-params">src</span>) &#123;</span><br><span class="language-javascript">                <span class="hljs-variable language_">this</span>.<span class="hljs-property">bgImage</span>.<span class="hljs-property">src</span> = src;</span><br><span class="language-javascript">            &#125;</span><br><span class="language-javascript">        &#125;</span><br><span class="language-javascript">        <span class="hljs-keyword">class</span> <span class="hljs-title class_">LoadingBackgroundImage</span> &#123; </span><br><span class="language-javascript">             <span class="hljs-keyword">static</span> <span class="hljs-variable constant_">LOADING_URL</span>= <span class="hljs-string">`/images/loading.gif`</span>;</span><br><span class="language-javascript">            <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) &#123;</span><br><span class="language-javascript">                <span class="hljs-variable language_">this</span>.<span class="hljs-property">backgroundImage</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BackgroundImage</span>();</span><br><span class="language-javascript">            &#125;</span><br><span class="language-javascript">            <span class="hljs-title function_">setSrc</span>(<span class="hljs-params">src</span>) &#123;</span><br><span class="language-javascript">                <span class="hljs-variable language_">this</span>.<span class="hljs-property">backgroundImage</span>.<span class="hljs-title function_">setSrc</span>(<span class="hljs-title class_">LoadingBackgroundImage</span>.<span class="hljs-property">LOADING_URL</span>);</span><br><span class="language-javascript">                <span class="hljs-keyword">let</span> img = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Image</span>();</span><br><span class="language-javascript">                img.<span class="hljs-property">onload</span> = <span class="hljs-function">() =&gt;</span> &#123;</span><br><span class="language-javascript">                    <span class="hljs-variable language_">this</span>.<span class="hljs-property">backgroundImage</span>.<span class="hljs-title function_">setSrc</span>(src);</span><br><span class="language-javascript">                &#125;</span><br><span class="language-javascript">                img.<span class="hljs-property">src</span> = src;</span><br><span class="language-javascript">            &#125;</span><br><span class="language-javascript">        &#125;</span><br><span class="language-javascript">        <span class="hljs-keyword">let</span> loadingBackgroundImage = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LoadingBackgroundImage</span>();</span><br><span class="language-javascript">        container.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) &#123;</span><br><span class="language-javascript">            <span class="hljs-keyword">let</span> src = event.<span class="hljs-property">target</span>.<span class="hljs-property">dataset</span>.<span class="hljs-property">src</span>;</span><br><span class="language-javascript">            loadingBackgroundImage.<span class="hljs-title function_">setSrc</span>(src + <span class="hljs-string">&#x27;?ts=&#x27;</span> + <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>());</span><br><span class="language-javascript">        &#125;);</span><br><span class="language-javascript">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="虚拟代理-图片懒加载"><a href="#虚拟代理-图片懒加载" class="headerlink" title="虚拟代理(图片懒加载)"></a>虚拟代理(图片懒加载)</h3><ul>
+<li>当前可视区域的高度 window.innerHeight || document.documentElement.clientHeight</li>
+<li>元素距离可视区域顶部的高度 getBoundingClientRect().top</li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect">getBoundingClientRect</a></li>
+<li>DOMRect 对象包含了一组用于描述边框的只读属性——left、top、right 和 bottom，单位为像素。除了 width 和 height 外的属性都是相对于视口的左上角位置而言的</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;X-UA-Compatible&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;ie=edge&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Lazy-Load<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css">        <span class="hljs-selector-class">.image</span> &#123;</span><br><span class="language-css">            <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;</span><br><span class="language-css">            <span class="hljs-attribute">height</span>: <span class="hljs-number">200px</span>;</span><br><span class="language-css">            <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#CCC</span>;</span><br><span class="language-css">        &#125;</span><br><span class="language-css"></span><br><span class="language-css">        <span class="hljs-selector-class">.image</span> <span class="hljs-selector-tag">img</span> &#123;</span><br><span class="language-css">            <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">            <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">        &#125;</span><br><span class="language-css">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;image-container&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg1.jpg&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg2.jpg&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg1.jpg&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg2.jpg&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg1.jpg&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg2.jpg&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg1.jpg&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg2.jpg&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg1.jpg&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;image&quot;</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">&quot;/images/bg2.jpg&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">    <span class="hljs-keyword">const</span> imgs = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementsByTagName</span>(<span class="hljs-string">&#x27;img&#x27;</span>);</span><br><span class="language-javascript">    <span class="hljs-keyword">const</span> clientHeight = <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerHeight</span> || <span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">clientHeight</span>;</span><br><span class="language-javascript">    <span class="hljs-keyword">let</span> loadedIndex = <span class="hljs-number">0</span>;</span><br><span class="language-javascript">    <span class="hljs-keyword">function</span> <span class="hljs-title function_">lazyload</span>(<span class="hljs-params"></span>) &#123;</span><br><span class="language-javascript">        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = loadedIndex; i &lt; imgs.<span class="hljs-property">length</span>; i++) &#123;</span><br><span class="language-javascript">            <span class="hljs-keyword">if</span> (clientHeight - imgs[i].<span class="hljs-title function_">getBoundingClientRect</span>().<span class="hljs-property">top</span> &gt; <span class="hljs-number">0</span>) &#123;</span><br><span class="language-javascript">                imgs[i].<span class="hljs-property">src</span> = imgs[i].<span class="hljs-property">dataset</span>.<span class="hljs-property">src</span>;</span><br><span class="language-javascript">                loadedIndex = i + <span class="hljs-number">1</span>;</span><br><span class="language-javascript">            &#125;</span><br><span class="language-javascript">        &#125;</span><br><span class="language-javascript">    &#125;</span><br><span class="language-javascript">    <span class="hljs-title function_">lazyload</span>();</span><br><span class="language-javascript">    <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;scroll&#x27;</span>, lazyload, <span class="hljs-literal">false</span>);</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="缓存代理"><a href="#缓存代理" class="headerlink" title="缓存代理"></a>缓存代理</h3><p>有些时候可以用空间换时间</p>
+<h4 id="正整数的阶乘（factorial）"><a href="#正整数的阶乘（factorial）" class="headerlink" title="正整数的阶乘（factorial）"></a>正整数的阶乘（factorial）</h4><p>一个正整数的阶乘（factorial）是所有小于及等于该数的正整数的积，并且0的阶乘为1</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> factorial = <span class="hljs-keyword">function</span> <span class="hljs-title function_">f</span>(<span class="hljs-params">num</span>) &#123;<br>    <span class="hljs-keyword">if</span> (num === <span class="hljs-number">1</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">return</span> (num * <span class="hljs-title function_">f</span>(num - <span class="hljs-number">1</span>));<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">const</span> proxy = <span class="hljs-keyword">function</span> (<span class="hljs-params">fn</span>) &#123;<br>    <span class="hljs-keyword">const</span> cache = &#123;&#125;;  <span class="hljs-comment">// 缓存对象</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">num</span>) &#123;<br>        <span class="hljs-keyword">if</span> (num <span class="hljs-keyword">in</span> cache) &#123;<br>            <span class="hljs-keyword">return</span> cache[num];   <span class="hljs-comment">// 使用缓存代理</span><br>        &#125;<br>        <span class="hljs-keyword">return</span> cache[num] = fn.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>, num);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">const</span> proxyFactorial = <span class="hljs-title function_">proxy</span>(factorial);<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">proxyFactorial</span>(<span class="hljs-number">5</span>));<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">proxyFactorial</span>(<span class="hljs-number">5</span>));<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">proxyFactorial</span>(<span class="hljs-number">5</span>));<br></code></pre></td></tr></table></figure>
+
+<h4 id="斐波那契数列-Fibonacci-sequence"><a href="#斐波那契数列-Fibonacci-sequence" class="headerlink" title="斐波那契数列(Fibonacci sequence)"></a>斐波那契数列(Fibonacci sequence)</h4><p>指的是这样一个数列：1、1、2、3、5、8、13、21、34。在数学上，斐波那契数列以如下被以递推的方法定义：F(1)&#x3D;1,F(2)&#x3D;1,F(n)&#x3D;F(n-1)+F(n-2)（n&gt;&#x3D;3，n∈N*）</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs arcade">let <span class="hljs-built_in">count</span> = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">function</span> <span class="hljs-title function_">fib</span>(<span class="hljs-params">n</span>) &#123;<br>    <span class="hljs-built_in">count</span>++;<br>    <span class="hljs-keyword">return</span> n &lt;= <span class="hljs-number">2</span> ? <span class="hljs-number">1</span> : fib(n - <span class="hljs-number">1</span>) + fib(n - <span class="hljs-number">2</span>);<br>&#125;<br><span class="hljs-keyword">var</span> result = fib(<span class="hljs-number">10</span>);<br><span class="hljs-built_in">console</span>.<span class="hljs-built_in">log</span>(result, <span class="hljs-built_in">count</span>);<span class="hljs-comment">//55 110</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs arcade">let <span class="hljs-built_in">count</span> = <span class="hljs-number">0</span>;<br>const fibWithCache = (<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>    let cache = &#123;&#125;;<br>    <span class="hljs-keyword">function</span> <span class="hljs-title function_">fib</span>(<span class="hljs-params">n</span>) &#123;<br>        <span class="hljs-built_in">count</span>++;<br>        <span class="hljs-keyword">if</span> (cache[n]) &#123;<br>            <span class="hljs-keyword">return</span> cache[n];<br>        &#125;<br>        let result = n &lt;= <span class="hljs-number">2</span> ? <span class="hljs-number">1</span> : fib(n - <span class="hljs-number">1</span>) + fib(n - <span class="hljs-number">2</span>);<br>        cache[n] = result;<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>    <span class="hljs-keyword">return</span> fib;<br>&#125;)();<br><span class="hljs-keyword">var</span> result = fibWithCache(<span class="hljs-number">10</span>);<br><span class="hljs-built_in">console</span>.<span class="hljs-built_in">log</span>(result, <span class="hljs-built_in">count</span>);<span class="hljs-comment">//55 17</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="防抖代理"><a href="#防抖代理" class="headerlink" title="防抖代理"></a>防抖代理</h3><ul>
+<li>通过防抖代理优化可以把多次请求合并为一次，提高性能</li>
+<li>节流与防抖都是为了减少频繁触发事件回调</li>
+<li>节流(Throttle)是在某段时间内不管触发了多少次回调都只认第一个，并在第一次结束后执行回调</li>
+<li>防抖(Debounce)就是在某段时间不管触发了多少回调都只看最后一个</li>
+</ul>
+<h4 id="节流"><a href="#节流" class="headerlink" title="节流"></a>节流</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;X-UA-Compatible&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;ie=edge&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Document<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css">        <span class="hljs-selector-id">#container</span> &#123;</span><br><span class="language-css">            <span class="hljs-attribute">width</span>: <span class="hljs-number">200px</span>;</span><br><span class="language-css">            <span class="hljs-attribute">height</span>: <span class="hljs-number">400px</span>;</span><br><span class="language-css">            <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid red;</span><br><span class="language-css">            <span class="hljs-attribute">overflow</span>: auto;</span><br><span class="language-css">        &#125;</span><br><span class="language-css"></span><br><span class="language-css">        <span class="hljs-selector-id">#container</span> <span class="hljs-selector-class">.content</span> &#123;</span><br><span class="language-css">            <span class="hljs-attribute">height</span>: <span class="hljs-number">4000px</span>;</span><br><span class="language-css">        &#125;</span><br><span class="language-css">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;container&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">        <span class="hljs-keyword">function</span> <span class="hljs-title function_">throttle</span>(<span class="hljs-params">callback, interval</span>) &#123;</span><br><span class="language-javascript">            <span class="hljs-keyword">let</span> last;</span><br><span class="language-javascript">            <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;</span><br><span class="language-javascript">                <span class="hljs-keyword">let</span> context = <span class="hljs-variable language_">this</span>;</span><br><span class="language-javascript">                <span class="hljs-keyword">let</span> args = <span class="hljs-variable language_">arguments</span>;</span><br><span class="language-javascript">                <span class="hljs-keyword">let</span> now = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>();</span><br><span class="language-javascript">                <span class="hljs-keyword">if</span> (last) &#123;</span><br><span class="language-javascript">                    <span class="hljs-keyword">if</span> (now - last &gt;= interval) &#123;</span><br><span class="language-javascript">                        last = now;</span><br><span class="language-javascript">                        callback.<span class="hljs-title function_">apply</span>(context, args);</span><br><span class="language-javascript">                    &#125;</span><br><span class="language-javascript">                &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="language-javascript">                    callback.<span class="hljs-title function_">apply</span>(context, args);</span><br><span class="language-javascript">                    last = now;</span><br><span class="language-javascript">                &#125;</span><br><span class="language-javascript"></span><br><span class="language-javascript">            &#125;</span><br><span class="language-javascript">        &#125;</span><br><span class="language-javascript">        <span class="hljs-keyword">let</span> lastTime = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>();</span><br><span class="language-javascript">        <span class="hljs-keyword">const</span> throttle_scroll = <span class="hljs-title function_">throttle</span>(<span class="hljs-function">() =&gt;</span> &#123;</span><br><span class="language-javascript">            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;触发了滚动事件&#x27;</span>, (<span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() - lastTime) / <span class="hljs-number">1000</span>);</span><br><span class="language-javascript">        &#125;, <span class="hljs-number">1000</span>);</span><br><span class="language-javascript">        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;container&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;scroll&#x27;</span>, throttle_scroll);</span><br><span class="language-javascript">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h4 id="防抖"><a href="#防抖" class="headerlink" title="防抖"></a>防抖</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;UTF-8&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;X-UA-Compatible&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;ie=edge&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Document<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css">        <span class="hljs-selector-id">#container</span> &#123;</span><br><span class="language-css">            <span class="hljs-attribute">width</span>: <span class="hljs-number">200px</span>;</span><br><span class="language-css">            <span class="hljs-attribute">height</span>: <span class="hljs-number">400px</span>;</span><br><span class="language-css">            <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid red;</span><br><span class="language-css">            <span class="hljs-attribute">overflow</span>: auto;</span><br><span class="language-css">        &#125;</span><br><span class="language-css"></span><br><span class="language-css">        <span class="hljs-selector-id">#container</span> <span class="hljs-selector-class">.content</span> &#123;</span><br><span class="language-css">            <span class="hljs-attribute">height</span>: <span class="hljs-number">4000px</span>;</span><br><span class="language-css">        &#125;</span><br><span class="language-css">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;container&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;content&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">        <span class="hljs-keyword">function</span> <span class="hljs-title function_">debounce</span>(<span class="hljs-params">callback, delay</span>) &#123;</span><br><span class="language-javascript">            <span class="hljs-keyword">let</span> timer;</span><br><span class="language-javascript">            <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;</span><br><span class="language-javascript">                <span class="hljs-keyword">let</span> context = <span class="hljs-variable language_">this</span>;</span><br><span class="language-javascript">                <span class="hljs-keyword">let</span> args = <span class="hljs-variable language_">arguments</span>;</span><br><span class="language-javascript">                <span class="hljs-keyword">if</span> (timer)</span><br><span class="language-javascript">                    <span class="hljs-built_in">clearTimeout</span>(timer);</span><br><span class="language-javascript">                timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> &#123;</span><br><span class="language-javascript">                    callback.<span class="hljs-title function_">apply</span>(context, args);</span><br><span class="language-javascript">                &#125;, delay);</span><br><span class="language-javascript">            &#125;</span><br><span class="language-javascript">        &#125;</span><br><span class="language-javascript">        <span class="hljs-keyword">let</span> lastTime = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>();</span><br><span class="language-javascript">        <span class="hljs-keyword">const</span> throttle_scroll = <span class="hljs-title function_">debounce</span>(<span class="hljs-function">() =&gt;</span> &#123;</span><br><span class="language-javascript">            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;触发了滚动事件&#x27;</span>, (<span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() - lastTime) / <span class="hljs-number">1000</span>);</span><br><span class="language-javascript">        &#125;, <span class="hljs-number">1000</span>);</span><br><span class="language-javascript">        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;container&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;scroll&#x27;</span>, throttle_scroll);</span><br><span class="language-javascript">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="防抖案例-未防抖"><a href="#防抖案例-未防抖" class="headerlink" title="防抖案例 -未防抖"></a>防抖案例 -未防抖</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;todos&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">    <span class="hljs-keyword">let</span> todos = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#todos&#x27;</span>);</span><br><span class="language-javascript">    <span class="hljs-variable language_">window</span>.<span class="hljs-property">onload</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;</span><br><span class="language-javascript">        <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/todos&#x27;</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">res</span>=&gt;</span>res.<span class="hljs-title function_">json</span>()).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span>=&gt;</span>&#123;</span><br><span class="language-javascript">            todos.<span class="hljs-property">innerHTML</span> = response.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">item</span>=&gt;</span><span class="hljs-string">`&lt;li &quot;&gt;&lt;input value=&quot;<span class="hljs-subst">$&#123;item.id&#125;</span>&quot; type=&quot;checkbox&quot; <span class="hljs-subst">$&#123;item.completed?<span class="hljs-string">&quot;checked&quot;</span>:<span class="hljs-string">&quot;&quot;</span>&#125;</span>/&gt;<span class="hljs-subst">$&#123;item.text&#125;</span>&lt;/li&gt;`</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&#x27;</span>);</span><br><span class="language-javascript">        &#125;);</span><br><span class="language-javascript">    &#125;</span><br><span class="language-javascript">    <span class="hljs-keyword">function</span> <span class="hljs-title function_">toggle</span>(<span class="hljs-params">id</span>)&#123;</span><br><span class="language-javascript">       <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/toggle/<span class="hljs-subst">$&#123;id&#125;</span>`</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">res</span>=&gt;</span>res.<span class="hljs-title function_">json</span>()).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span>=&gt;</span>&#123;</span><br><span class="language-javascript">            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;response&#x27;</span>,response);</span><br><span class="language-javascript">        &#125;);</span><br><span class="language-javascript">    &#125;</span><br><span class="language-javascript">    todos.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>,<span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>)&#123;</span><br><span class="language-javascript">        <span class="hljs-keyword">let</span> checkbox = event.<span class="hljs-property">target</span>;</span><br><span class="language-javascript">        <span class="hljs-keyword">let</span> id = checkbox.<span class="hljs-property">value</span>;</span><br><span class="language-javascript">        <span class="hljs-title function_">toggle</span>(id);</span><br><span class="language-javascript">    &#125;);</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>app.js</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs xquery"><span class="hljs-keyword">let</span> express=require(<span class="hljs-string">&#x27;express&#x27;</span>);<br><span class="hljs-keyword">let</span> app=express();<br>app.use(express.static(__dirname));<br><span class="hljs-keyword">let</span> todos=[<br>    <span class="hljs-built_in">&#123;id</span>: <span class="hljs-number">1</span>,text: <span class="hljs-string">&#x27;a&#x27;</span>,completed:<span class="hljs-built_in"> false</span>&#125;,<br>    <span class="hljs-built_in">&#123;id</span>: <span class="hljs-number">2</span>,text: <span class="hljs-string">&#x27;b&#x27;</span>,completed:<span class="hljs-built_in"> false</span>&#125;,<br>    <span class="hljs-built_in">&#123;id</span>: <span class="hljs-number">3</span>,text: <span class="hljs-string">&#x27;c&#x27;</span>,completed:<span class="hljs-built_in"> false</span>&#125;,<br>];<br>app.get(<span class="hljs-string">&#x27;/todos&#x27;</span>,<span class="hljs-keyword">function</span> (req,res) &#123;<br>    res.json(todos);<br>&#125;);<br>app.get(<span class="hljs-string">&#x27;/toggle/:id&#x27;</span>,<span class="hljs-keyword">function</span> (req,res) &#123;<br>    <span class="hljs-keyword">let</span><span class="hljs-built_in"> id</span>=req.params<span class="hljs-built_in">.id</span>;<br>    todos = todos.<span class="hljs-keyword">map</span>(<span class="hljs-type">item</span> =&gt; &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-type">item</span><span class="hljs-built_in">.id</span>=<span class="hljs-built_in">=id</span>) &#123;<br>            <span class="hljs-type">item</span>.completed=!<span class="hljs-type">item</span>.completed;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-type">item</span>;<br>    &#125;);<br>    res.json(&#123;code:<span class="hljs-number">0</span>&#125;);<br>&#125;);<br>app.listen(<span class="hljs-number">8080</span>);<br></code></pre></td></tr></table></figure>
+
+<h4 id="防抖案例-防抖"><a href="#防抖案例-防抖" class="headerlink" title="防抖案例 -防抖"></a>防抖案例 -防抖</h4><p>todos.html</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;todos&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"></span><br><span class="language-javascript">    <span class="hljs-keyword">let</span> todos = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#todos&#x27;</span>);</span><br><span class="language-javascript">    <span class="hljs-variable language_">window</span>.<span class="hljs-property">onload</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;</span><br><span class="language-javascript">        <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/todos&#x27;</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">res</span>=&gt;</span>res.<span class="hljs-title function_">json</span>()).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span>=&gt;</span>&#123;</span><br><span class="language-javascript">            todos.<span class="hljs-property">innerHTML</span> = response.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">item</span>=&gt;</span><span class="hljs-string">`&lt;li &quot;&gt;&lt;input value=&quot;<span class="hljs-subst">$&#123;item.id&#125;</span>&quot; type=&quot;checkbox&quot; <span class="hljs-subst">$&#123;item.completed?<span class="hljs-string">&quot;checked&quot;</span>:<span class="hljs-string">&quot;&quot;</span>&#125;</span>/&gt;<span class="hljs-subst">$&#123;item.text&#125;</span>&lt;/li&gt;`</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&#x27;</span>);</span><br><span class="language-javascript">        &#125;);</span><br><span class="language-javascript">    &#125;</span><br><span class="language-javascript">    <span class="hljs-keyword">function</span> <span class="hljs-title function_">toggle</span>(<span class="hljs-params">id</span>)&#123;</span><br><span class="language-javascript">       <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/toggle/<span class="hljs-subst">$&#123;id&#125;</span>`</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">res</span>=&gt;</span>res.<span class="hljs-title function_">json</span>()).<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">response</span>=&gt;</span>&#123;</span><br><span class="language-javascript">            <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;response&#x27;</span>,response);</span><br><span class="language-javascript">        &#125;);</span><br><span class="language-javascript">    &#125;</span><br><span class="language-javascript">    <span class="hljs-keyword">let</span> <span class="hljs-title class_">LazyToggle</span> = (<span class="hljs-keyword">function</span>(<span class="hljs-params">id</span>)&#123;</span><br><span class="language-javascript">        <span class="hljs-keyword">let</span> ids = [];</span><br><span class="language-javascript">        <span class="hljs-keyword">let</span> timer;</span><br><span class="language-javascript">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span>(<span class="hljs-params">id</span>)&#123;</span><br><span class="language-javascript">            ids.<span class="hljs-title function_">push</span>(id);</span><br><span class="language-javascript">            <span class="hljs-keyword">if</span>(timer)&#123;</span><br><span class="language-javascript">               <span class="hljs-built_in">clearTimeout</span>(timer);</span><br><span class="language-javascript">            &#125;</span><br><span class="language-javascript">            timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)&#123;</span><br><span class="language-javascript">                <span class="hljs-title function_">toggle</span>(ids.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>));</span><br><span class="language-javascript">                ids = <span class="hljs-literal">null</span>;</span><br><span class="language-javascript">                <span class="hljs-built_in">clearTimeout</span>(timer);</span><br><span class="language-javascript">                timer = <span class="hljs-literal">null</span>;</span><br><span class="language-javascript">            &#125;,<span class="hljs-number">2000</span>);</span><br><span class="language-javascript">        &#125;</span><br><span class="language-javascript">    &#125;)();</span><br><span class="language-javascript">    todos.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>,<span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>)&#123;</span><br><span class="language-javascript">        <span class="hljs-keyword">let</span> checkbox = event.<span class="hljs-property">target</span>;</span><br><span class="language-javascript">        <span class="hljs-keyword">let</span> id = checkbox.<span class="hljs-property">value</span>;</span><br><span class="language-javascript">        <span class="hljs-title class_">LazyToggle</span>(id);</span><br><span class="language-javascript">    &#125;);</span><br><span class="language-javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>app.js</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs xquery">app.get(<span class="hljs-string">&#x27;/toggle/:ids&#x27;</span>,<span class="hljs-keyword">function</span> (req,res) &#123;<br>    <span class="hljs-keyword">let</span> ids=req.params.ids;<br>    ids=ids.split(<span class="hljs-string">&#x27;,&#x27;</span>).<span class="hljs-keyword">map</span>(<span class="hljs-type">item</span>=&gt;parseInt(<span class="hljs-type">item</span>));<br>    todos = todos.<span class="hljs-keyword">map</span>(<span class="hljs-type">item</span> =&gt; &#123;<br>        <span class="hljs-keyword">if</span> (ids.includes(<span class="hljs-type">item</span><span class="hljs-built_in">.id</span>)) &#123;<br>            <span class="hljs-type">item</span>.completed=!<span class="hljs-type">item</span>.completed;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-type">item</span>;<br>    &#125;);<br>    res.json(&#123;code:<span class="hljs-number">0</span>&#125;);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<h3 id="代理跨域"><a href="#代理跨域" class="headerlink" title="代理跨域"></a>代理跨域</h3><h4 id="正向代理"><a href="#正向代理" class="headerlink" title="正向代理"></a>正向代理</h4><ul>
+<li>正向代理的对象是客户端，服务器端看不到真正的客户端</li>
+<li>通过公司代理服务器上网</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/18-34-19-438745f99bb4afe960201443b2eb9f2c-20221102183418-a1f21d.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h4 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h4><ul>
+<li>反向代理的对象的服务端,客户端看不到真正的服务端</li>
+<li>nginx代理应用服务器</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2022/11/02/18-36-28-b0dad5d0930e95345e79c6d23c6dd414-fanproxy-f1c368.jpeg" srcset="/blog/img/loading.gif" lazyload></p>
+<p>proxy-server.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;http&#x27;</span>);<br><span class="hljs-keyword">const</span> httpProxy = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;http-proxy&#x27;</span>);<br><span class="hljs-comment">//创建一个代理服务</span><br><span class="hljs-keyword">const</span> proxy = httpProxy.<span class="hljs-title function_">createProxyServer</span>();<br><span class="hljs-comment">//创建http服务器并监听8888端口</span><br><span class="hljs-keyword">let</span> server = http.<span class="hljs-title function_">createServer</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">req, res</span>) &#123;<br>    <span class="hljs-comment">//将用户的请求转发到本地9999端口上</span><br>    proxy.<span class="hljs-title function_">web</span>(req, res, &#123;<br>        <span class="hljs-attr">target</span>: <span class="hljs-string">&#x27;http://127.0.0.1:9999&#x27;</span><br>    &#125;);<br>    <span class="hljs-comment">//监听代理服务错误</span><br>    proxy.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) &#123;<br>        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(err);<br>    &#125;);<br>&#125;);<br>server.<span class="hljs-title function_">listen</span>(<span class="hljs-number">8888</span>, <span class="hljs-string">&#x27;0.0.0.0&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>real-server.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;http&#x27;</span>);<br><span class="hljs-keyword">let</span> server = http.<span class="hljs-title function_">createServer</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">req, res</span>) &#123;<br>    res.<span class="hljs-title function_">end</span>(<span class="hljs-string">&#x27;9999&#x27;</span>);<br>&#125;);<br>server.<span class="hljs-title function_">listen</span>(<span class="hljs-number">9999</span>, <span class="hljs-string">&#x27;0.0.0.0&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<h3 id="代理跨域-1"><a href="#代理跨域-1" class="headerlink" title="代理跨域"></a>代理跨域</h3><ul>
+<li>nginx代理跨域</li>
+<li><code>webpack-dev-server</code>代理跨域</li>
+<li>客户端代理跨域</li>
+<li>当前的服务启动在origin(3000端口)上，但是调用的接口在target(4000端口)上</li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/postMessage">postMessage</a>方法可以安全地实现跨源通信<ul>
+<li>otherWindow:其他窗口的一个引用 message:将要发送到其他window的数据</li>
+<li>message 将要发送到其他window的数据</li>
+<li>targetOrigin通过窗口的origin属性来指定哪些窗口能接收到消息事件，其值可以是字符串”*”（表示无限制）或者一个URI</li>
+</ul>
+</li>
+</ul>
+ <figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mel">otherWindow.postMessage(message, targetOrigin, [transfer]);<br><span class="hljs-string">``</span><span class="hljs-string">``</span><br><br>+ data 从其他<span class="hljs-keyword">window</span>中传递过来的对象<br>+ origin 调用postMessage时消息发送方窗口的origin<br>+ <span class="hljs-keyword">source</span> 对发送消息的窗口对象的引用<br><br></code></pre></td></tr></table></figure>
+<p>window.addEventListener(“message”, receiveMessage, false);</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs maxima"><span class="hljs-built_in">origin</span>.js<br><br></code></pre></td></tr></table></figure>
+<p>let express&#x3D;require(‘express’);<br>let app&#x3D;express();<br>app.use(express.static(__dirname));<br>app.listen(3000);</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><br><span class="hljs-keyword">target</span>.js<br><br></code></pre></td></tr></table></figure>
+<p>let express &#x3D; require(‘express’);<br>let app &#x3D; express();<br>let bodyParser &#x3D; require(‘body-parser’);<br>app.use(bodyParser.urlencoded({ extended: true }));<br>app.use(express.static(__dirname));<br>let users &#x3D; [];<br>app.post(‘&#x2F;register’, function (req, res) {<br>    let body &#x3D; req.body;<br>    let target &#x3D; body.target;<br>    let callback &#x3D; body.callback;<br>    let username &#x3D; body.username;<br>    let password &#x3D; body.password;<br>    let user &#x3D; { username, password };<br>    let id &#x3D; users.length &#x3D;&#x3D; 0 ? 1 : users[users.length - 1].id + 1;<br>    user.id &#x3D; id;<br>    users.push(user);<br>    res.status(302);<br>    res.header(‘Location’, <code>$&#123;target&#125;?callback=$&#123;callback&#125;&amp;args=$&#123;id&#125;</code>);<br>    res.end();<br>});<br>app.listen(4000);</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stata"><br><span class="hljs-keyword">reg</span>.html<br><br></code></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        window.addEventListener('message', function (event) {
+            console.log(event.data);
+
+<pre><code class="hljs">        if (event.data.receiveId) &#123;
+            alert(&#39;用户ID=&#39; + event.data.receiveId);
+        &#125;
+    &#125;)
+&lt;/script&gt;
+&lt;iframe name=&quot;proxyIframe&quot; id=&quot;proxyIframe&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;
+&lt;form action=&quot;http://localhost:4000/register&quot; method=&quot;POST&quot; target=&quot;proxyIframe&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;callback&quot; value=&quot;receiveId&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;target&quot; value=&quot;http://localhost:3000/target.html&quot;&gt;
+    用户名&lt;input type=&quot;text&quot; name=&quot;username&quot; /&gt;
+    密码&lt;input type=&quot;text&quot; name=&quot;password&quot; /&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+</body>
+
+</html>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><br><span class="hljs-keyword">target</span>.html<br><br></code></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        window.onload = function () {
+            var query = location.search.substr(1).split('&');
+            let callback, args;
+            for (let i = 0, len = query.length; i < len; i++) {
+                let item = query[i].split('=');
+                if (item[0] == 'callback') {
+                    callback = item[1];
+                } else if (item[0] == 'args') {
+                    args = item[1];
+                }
+            }
+            try {
+                window.parent.postMessage({ [callback]: args }, '*');
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    </script>
+</body>
+
+</html>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><br>###  $<span class="hljs-variable">.proxy</span><br><br>+ 接受一个函数，然后返回一个新函数，并且这个新函数始终保持了特定的上下文语境。<br>+ jQuery<span class="hljs-variable">.proxy</span>( <span class="hljs-keyword">function</span>, <span class="hljs-keyword">context</span> ) <span class="hljs-keyword">function</span>为执行的函数，content为函数的上下文<span class="hljs-keyword">this</span>值会被设置成这个object对象<br><br></code></pre></td></tr></table></figure>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jquery proxy</title>
+</head>
+
+<body>
+    <button id="btn">点我变红</button>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script>
+        let btn = document.getElementById('btn');
+        btn.addEventListener('click', function () {
+            setTimeout($.proxy((function () {
+                $(this).css('color', 'red');
+            }), this), 1000);
+        });    
+    </script>
+</body>
+
+</html>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs"><br></code></pre></td></tr></table></figure>
+function proxy(fn, context) {
+    return function () {
+       return fn.call(context, arguments);
+    }
+}
+
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs awk"><br><span class="hljs-comment">### Proxy</span><br><br>+ Proxy 用于修改某些操作的默认行为<br>+ Proxy 可以理解成，在目标对象之前架设一层`拦截`,外界对该对象的访问，都必须先通过这层拦截，因此提供了一种机制，可以对外界的访问进行过滤和改写。<br>+ Proxy 这个词的原意是代理，用在这里表示由它来`代理`某些操作，可以译为`代理器 `<br>+  [Proxy](https:<span class="hljs-regexp">//</span>developer.mozilla.org<span class="hljs-regexp">/zh-CN/</span>docs<span class="hljs-regexp">/Web/</span>JavaScript<span class="hljs-regexp">/Reference/</span>Global_Objects/Proxy)<br>+ [defineProperty](https:<span class="hljs-regexp">//</span>developer.mozilla.org<span class="hljs-regexp">/zh-CN/</span>docs<span class="hljs-regexp">/Web/</span>JavaScript<span class="hljs-regexp">/Reference/</span>Global_Objects<span class="hljs-regexp">/Object/</span>defineProperty)<br><br></code></pre></td></tr></table></figure>
+<p>let wang&#x3D;{<br>    name: ‘wanglaoshi’,<br>    age: 29,<br>    height:165<br>}<br>let wangMama&#x3D;new Proxy(wang,{<br>    get(target,key) {<br>        if (key &#x3D;&#x3D; ‘age’) {<br>            return wang.age-1;<br>        } else if (key &#x3D;&#x3D; ‘height’) {<br>            return wang.height-5;<br>        }<br>        return target[key];<br>    },<br>    set(target,key,val) {<br>        if (key &#x3D;&#x3D; ‘boyfriend’) {<br>            let boyfriend&#x3D;val;<br>            if (boyfriend.age&gt;40) {<br>                throw new Error(‘太老’);<br>            } else if (boyfriend.salary&lt;20000) {<br>                throw new Error(‘太穷’);<br>            } else {<br>                target[key]&#x3D;val;<br>                return true;<br>            }<br>        }<br>    }<br>});<br>console.log(wangMama.age);<br>console.log(wangMama.height);<br>wangMama.boyfriend&#x3D;{<br>    age: 41,<br>    salary:3000<br>}</p>
+<p>&#96;&#96;&#96;</p>
+<h4 id="Vue2和Vue3"><a href="#Vue2和Vue3" class="headerlink" title="Vue2和Vue3"></a>Vue2和Vue3</h4><p>Vue2 中的变化侦测实现对 Object 及 Array 分别进行了不同的处理,Object 使用了 Object.defineProperty API,Array使用了拦截器对 Array 原型上的能够改变数据的方法进行拦截。虽然也实现了数据的变化侦测，但存在很多局限 ，比如对象新增属性无法被侦测，以及通过数组下边修改数组内容，也因此在 Vue2 中经常会使用到 $set 这个方法对数据修改，以保证依赖更新。</p>
+<p>Vue3 中使用了 es6 的 Proxy API对数据代理，没有像 Vue2 中对原数据进行修改，只是加了代理包装，因此首先性能上会有所改善。其次解决了 Vue2 中变化侦测的局限性，可以不使用 $set 新增的对象属性及通过下标修改数组都能被侦测到。</p>
+<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><h3 id="代理模式-VS-适配器模式"><a href="#代理模式-VS-适配器模式" class="headerlink" title="代理模式 VS 适配器模式"></a>代理模式 VS 适配器模式</h3><p>适配器提供不同接口，代理模式提供一模一样的接口</p>
+<h3 id="代理模式-VS-装饰器模式"><a href="#代理模式-VS-装饰器模式" class="headerlink" title="代理模式 VS 装饰器模式"></a>代理模式 VS 装饰器模式</h3><p>装饰器模式原来的功能不变还可以使用，代理模式改变原来的功能</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/blog/categories/design-pattern/" class="category-chain-item">design pattern</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/design-pattern/">#design pattern</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>设计模式之代理模式</div>
+      <div>https://retech-fe.github.io/blog/2022/11/04/design-pattern-proxy/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>pengfei.zuo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月4日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2022/10/27/design-pattern-strategy/" title="设计模式之策略模式">
+                        <span class="hidden-mobile">设计模式之策略模式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'retech-fe/blog');
+      s.setAttribute('issue-term', 'pathname');
+      
+      s.setAttribute('label', 'utterances');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io/zh-cn/" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> | <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
