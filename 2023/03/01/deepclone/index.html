@@ -1,0 +1,833 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/bg/favicon.png">
+  <link rel="icon" href="/blog/img/bg/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="pengfei.zuo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在这篇文章中，处理了深拷贝中一般考虑不到的正则、Set、Map、Function、Date、Error等数据类型。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手撕JavaScript深拷贝&amp;浅拷贝">
+<meta property="og:url" content="https://retech-fe.github.io/blog/2023/03/01/deepclone/index.html">
+<meta property="og:site_name" content="Re:Tech FE Blog">
+<meta property="og:description" content="在这篇文章中，处理了深拷贝中一般考虑不到的正则、Set、Map、Function、Date、Error等数据类型。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/17-47-45-1c64aafdd8991d06b87f184a7706827c-20230301174744-3ee2f1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/14-05-21-83736599276fecc03505b6b6db4841a5-20230301140521-775aec.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/17-49-01-e9f74cd0ed48c8ac4caab069d5ccd585-20230301174901-e7c13d.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/14-22-12-a193581dea878c06fee76d93ef98e990-20230301142211-7fc8c8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/17-43-50-05d483678394b67055eb34525ba338cd-20230301174349-c2651f.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/14-45-23-b1a19c3ae0136ba365968428a5b600ef-20230301144522-6abb1c.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/17-56-38-5b983431fd83dfe37a5a831f8ce10e5e-20230301175638-071a44.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/15-45-53-bd2937f7f0265f01ffc751c11ba6297f-20230301154552-7f1208.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/16-05-10-16c7f6526f8df81edebae1afcca9264a-20230301160509-754980.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/16-29-57-de359543a8b33ecb52b96dd468a1163a-20230301162957-f3b6cd.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/16-51-51-edc0dafd8350f96358585b840723aa34-20230301165150-8eb9d3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/16-54-01-0f8ffae364eac2fafb7cf081ff952919-20230301165401-4911cb.png">
+<meta property="article:published_time" content="2023-03-01T18:13:02.000Z">
+<meta property="article:modified_time" content="2023-03-01T10:16:19.498Z">
+<meta property="article:author" content="Re:Tech FE">
+<meta property="article:tag" content="源码">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/17-47-45-1c64aafdd8991d06b87f184a7706827c-20230301174744-3ee2f1.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>手撕JavaScript深拷贝&amp;浅拷贝 - Re:Tech FE Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"retech-fe.github.io","root":"/blog/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>Re:Tech FE&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blog/img/bg/4.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="手撕JavaScript深拷贝&amp;浅拷贝"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        pengfei.zuo
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-01 18:13" pubdate>
+          2023年3月1日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          13k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          106 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">手撕JavaScript深拷贝&amp;浅拷贝</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="深拷贝要考虑到所有数据类型"><a href="#深拷贝要考虑到所有数据类型" class="headerlink" title="深拷贝要考虑到所有数据类型"></a>深拷贝要考虑到所有数据类型</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">var</span> obj = &#123;<br>    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;name&#x27;</span>,<br>    <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>,<br>    <span class="hljs-attr">bool</span>: <span class="hljs-literal">true</span>,<br>    <span class="hljs-attr">n</span>: <span class="hljs-literal">null</span>,<br>    <span class="hljs-attr">u</span>: <span class="hljs-literal">undefined</span>,<br>    <span class="hljs-attr">symb</span>: <span class="hljs-title class_">Symbol</span>(<span class="hljs-string">&#x27;symbol&#x27;</span>),<br>    <span class="hljs-attr">big</span>: <span class="hljs-title class_">BigInt</span>(<span class="hljs-number">12</span>),<br>    <span class="hljs-attr">arr</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],<br>    <span class="hljs-attr">reg</span>: <span class="hljs-regexp">/^\d+$/</span>,<br>    <span class="hljs-attr">fn</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;fn&#x27;</span>)<br>    &#125;,<br>    <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(),<br>    <span class="hljs-attr">err</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;error&#x27;</span>),<br>    <span class="hljs-attr">set</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>([&#123;<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>&#125;, &#123;<span class="hljs-attr">a</span>: <span class="hljs-number">2</span>&#125;]),<br>    <span class="hljs-attr">map</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[&#123;<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>&#125;, &#123;<span class="hljs-attr">b</span>: <span class="hljs-number">1</span>&#125;], [&#123;<span class="hljs-attr">a</span>: <span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-attr">b</span>: <span class="hljs-number">2</span>&#125;]]),<br>    <span class="hljs-attr">child</span>: &#123;<br>        <span class="hljs-attr">ele</span>: <span class="hljs-string">&#x27;body&#x27;</span>,<br>        <span class="hljs-attr">x</span>: <span class="hljs-number">100</span><br>    &#125;<br>&#125;;<br><br><span class="hljs-comment">// 测试循环依赖</span><br><span class="hljs-comment">// obj.obj = obj;</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>7基本数据类型：string、number、boolean、null、undefined、symbol、BigInt</li>
+<li>symbol类型做value、symbol类型做key</li>
+<li>引用类型：数组、正则、日期、Error、Set、Map</li>
+<li>函数类型</li>
+<li>深层次对象类型</li>
+<li>本文没有考虑<code>ArrayBuffer</code>这种引用数据类型；lodash的深拷贝中会处理</li>
+</ul>
+<h2 id="使用展开运算符完成对象拷贝存在的问题"><a href="#使用展开运算符完成对象拷贝存在的问题" class="headerlink" title="使用展开运算符完成对象拷贝存在的问题"></a>使用展开运算符完成对象拷贝存在的问题</h2><p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/17-47-45-1c64aafdd8991d06b87f184a7706827c-20230301174744-3ee2f1.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li>展开运算符可以把obj的每一项展开然后赋值给obj2</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/14-05-21-83736599276fecc03505b6b6db4841a5-20230301140521-775aec.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li>因为obj2在堆内存中开辟了一份新的内存空间来存储从obj拷贝过来的所有字段的值</li>
+<li>obj2 &#x3D;&#x3D;&#x3D; obj &#x3D;&gt; false，因为是一个新的对象，所以不相等</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/17-49-01-e9f74cd0ed48c8ac4caab069d5ccd585-20230301174901-e7c13d.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li>obj2中的child和arr又是引用类型，内部还包含其他基本数据类型或者引用类型</li>
+<li>obj2.child &#x3D;&#x3D;&#x3D; obj.child &#x3D;&gt; false</li>
+<li><strong>…展开运算符是浅拷贝</strong>，只拷贝了obj的第一级的key对应的值给到obj2，第二级以及后面的第三级、第四级没有进行拷贝；所以obj.child 和 obj2.child指向的是同一块内存</li>
+</ul>
+<h2 id="使用JSON-stringfy进行深拷贝存在的问题"><a href="#使用JSON-stringfy进行深拷贝存在的问题" class="headerlink" title="使用JSON.stringfy进行深拷贝存在的问题"></a>使用JSON.stringfy进行深拷贝存在的问题</h2><p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/14-22-12-a193581dea878c06fee76d93ef98e990-20230301142211-7fc8c8.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li>BigInt类型的值不能被序列化</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/17-43-50-05d483678394b67055eb34525ba338cd-20230301174349-c2651f.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li>把BigInt类型的值先去掉，就能使用JSON.stringfy来深拷贝</li>
+<li>undefined类型的值丢了</li>
+<li>函数类型的值丢了</li>
+<li>Symbol类型的值丢了</li>
+<li>正则类型的值变成空对象了</li>
+<li>Error类型的值变成空对象了</li>
+<li>Set类型的值变成空对象了</li>
+<li>Map类型的值变成空对象了</li>
+<li>key是Symbol类型的话，该key都丢了，即使自己for in循序也不能遍历Symbol类型的key</li>
+<li>Date日期类型的值变成字符串了</li>
+</ul>
+<blockquote>
+<p>JSON.stringify会把值变成字符串，对于特殊的数据类型就是转不了字符串在反序列化回来，所以就会存在问题</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/14-45-23-b1a19c3ae0136ba365968428a5b600ef-20230301144522-6abb1c.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li>JSON.parse(JSON.stringify(obj))先stringify再parse得到的对象确实是深拷贝</li>
+<li>第二级child也进行深拷贝了</li>
+</ul>
+<h2 id="第一版深拷贝实现"><a href="#第一版深拷贝实现" class="headerlink" title="第一版深拷贝实现"></a>第一版深拷贝实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"> <span class="hljs-keyword">function</span> <span class="hljs-title function_">deepClone</span>(<span class="hljs-params">obj</span>)&#123;<br>    <span class="hljs-keyword">if</span>(obj == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> obj;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">typeof</span> obj !==<span class="hljs-string">&#x27;object&#x27;</span>) <span class="hljs-keyword">return</span> obj;<br>    <span class="hljs-keyword">let</span> cloneObj = <span class="hljs-keyword">new</span> obj.<span class="hljs-property">constructor</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> obj)&#123;<br>        <span class="hljs-keyword">if</span>(obj.<span class="hljs-title function_">hasOwnProperty</span>(key))&#123;<br>            cloneObj[key] = <span class="hljs-title function_">deepClone</span>(obj[key])<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> cloneObj<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h3><ul>
+<li>如果是基本数据类型直接把原始的值赋给新的克隆后的对象相应的key</li>
+<li>如果是引用类型的值，就new一个新的该引用类型对象，然后值赋给新的克隆后的对象相应的key</li>
+</ul>
+<h3 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h3><p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/17-56-38-5b983431fd83dfe37a5a831f8ce10e5e-20230301175638-071a44.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li>正则表达式的内容丢失</li>
+<li>error对象的message丢失</li>
+<li>set对象长度为0</li>
+<li>map对象长度为0</li>
+<li>function函数类型的值因为typeof返回的是’function’并不是’object’，所以直接返回了</li>
+</ul>
+<h2 id="第二版深拷贝实现"><a href="#第二版深拷贝实现" class="headerlink" title="第二版深拷贝实现"></a>第二版深拷贝实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">deepClone</span>(<span class="hljs-params">target</span>)&#123;<br>           <br>    <span class="hljs-comment">// 数据类型</span><br>    <span class="hljs-keyword">let</span> type = <span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">toString</span>.<span class="hljs-title function_">call</span>(target).<span class="hljs-title function_">slice</span>(<span class="hljs-number">8</span>, -<span class="hljs-number">1</span>).<span class="hljs-title function_">toLowerCase</span>();<br><br>    <span class="hljs-comment">// 处理null和undefined, null == undefined</span><br>    <span class="hljs-keyword">if</span> (target == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> target;<br><br>    <span class="hljs-comment">// constructor构造函数， 必须要放</span><br>    <span class="hljs-keyword">let</span> ctr = target.<span class="hljs-property">constructor</span>;<br><br>    <span class="hljs-comment">// Regexp正则和Date日期类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(regexp|date)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">ctr</span>(target);<br>    &#125;<br>    <span class="hljs-comment">// Error类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(error)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">ctr</span>(target.<span class="hljs-property">message</span>);<br>    &#125;<br>    <span class="hljs-comment">// Function类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(function)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">proxy</span>(<span class="hljs-params">...args</span>) &#123;<br>            target.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>, args);<br>        &#125;;<br>    &#125;<br>    <span class="hljs-comment">// Set类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(set)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">let</span> cloneSet = <span class="hljs-keyword">new</span> ctr;<br>        target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> &#123;<br>            cloneSet.<span class="hljs-title function_">add</span>(<span class="hljs-title function_">_deepClone</span>(item))<br>        &#125;)<br>        <span class="hljs-keyword">return</span> cloneSet;<br>    &#125;<br><br>    <span class="hljs-comment">// Map类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(map)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">let</span> cloneMap = <span class="hljs-keyword">new</span> ctr;<br>        target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item, key</span>) =&gt;</span> &#123;<br>            cloneMap.<span class="hljs-title function_">set</span>(<span class="hljs-title function_">_deepClone</span>(key), <span class="hljs-title function_">_deepClone</span>(item))<br>        &#125;)<br>        <span class="hljs-keyword">return</span> cloneMap;<br>    &#125;<br><br>    <span class="hljs-comment">// Symbol不用处理，因为Symbol(xxx)调用后返回的值不相等</span><br>    <span class="hljs-comment">// 其他数据类型原样返回，后续有处理的其他数据类型如ArrayBuffer就可以在上面继续添加</span><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-regexp">/^(array|object)$/i</span>.<span class="hljs-title function_">test</span>(type)) <span class="hljs-keyword">return</span> target;<br><br>    <span class="hljs-keyword">let</span> cloneTarget = <span class="hljs-keyword">new</span> ctr<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> target)&#123;<br>        <span class="hljs-keyword">if</span>(target.<span class="hljs-title function_">hasOwnProperty</span>(key))&#123;<br>            cloneTarget[key] = <span class="hljs-title function_">deepClone</span>(target[key]);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> cloneTarget;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/15-45-53-bd2937f7f0265f01ffc751c11ba6297f-20230301154552-7f1208.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li>正则类型的值只需要把原本的正则target传给新的构造函数就不会丢失，而且还创一个新的实例</li>
+<li>Error类型需要把message传给构造函数</li>
+<li>Funtion类型需要Object.prototype.toString.call(target).slice(8, -1).toLowerCase()来拿到类型的相信信息，从而对函数类型的值单独处理，不能直接返回</li>
+</ul>
+<h2 id="第三版深拷贝实现-循环依赖"><a href="#第三版深拷贝实现-循环依赖" class="headerlink" title="第三版深拷贝实现-循环依赖"></a>第三版深拷贝实现-循环依赖</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"> <span class="hljs-keyword">var</span> obj = &#123;<br>    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;name&#x27;</span>,<br>    <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>,<br>    <span class="hljs-attr">bool</span>: <span class="hljs-literal">true</span>,<br>    <span class="hljs-attr">n</span>: <span class="hljs-literal">null</span>,<br>    <span class="hljs-attr">u</span>: <span class="hljs-literal">undefined</span>,<br>    <span class="hljs-attr">symb</span>: <span class="hljs-title class_">Symbol</span>(<span class="hljs-string">&#x27;symbol&#x27;</span>),<br>    <span class="hljs-attr">big</span>: <span class="hljs-title class_">BigInt</span>(<span class="hljs-number">12</span>),<br>    <span class="hljs-attr">arr</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],<br>    <span class="hljs-attr">reg</span>: <span class="hljs-regexp">/^\d+$/</span>,<br>    <span class="hljs-attr">fn</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;fn&#x27;</span>)<br>    &#125;,<br>    <span class="hljs-attr">time</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(),<br>    <span class="hljs-attr">err</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;error&#x27;</span>),<br>    <span class="hljs-attr">set</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>([&#123;<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>&#125;, &#123;<span class="hljs-attr">a</span>: <span class="hljs-number">2</span>&#125;]),<br>    <span class="hljs-attr">map</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[&#123;<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>&#125;, &#123;<span class="hljs-attr">b</span>: <span class="hljs-number">1</span>&#125;], [&#123;<span class="hljs-attr">a</span>: <span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-attr">b</span>: <span class="hljs-number">2</span>&#125;]]),<br>    <span class="hljs-attr">child</span>: &#123;<br>        <span class="hljs-attr">ele</span>: <span class="hljs-string">&#x27;body&#x27;</span>,<br>        <span class="hljs-attr">x</span>: <span class="hljs-number">100</span><br>    &#125;<br>&#125;;<br><br><span class="hljs-comment">// 循环依赖</span><br>obj.<span class="hljs-property">obj</span> = obj;<br></code></pre></td></tr></table></figure>
+
+<p>在控制台可以无限查看obj，这就是循环依赖</p>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/16-05-10-16c7f6526f8df81edebae1afcca9264a-20230301160509-754980.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>如果沿用原来的代码会报调用次数太多，爆栈 Maximum call stack size exceeded</p>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/16-29-57-de359543a8b33ecb52b96dd468a1163a-20230301162957-f3b6cd.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h3 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h3><ul>
+<li>避免对象或者数组类型的值循环递归</li>
+</ul>
+<h4 id="方案一"><a href="#方案一" class="headerlink" title="方案一"></a>方案一</h4><ul>
+<li>利用缓存，如果某个对象或者数组类型的值已经处理过就直接返回，然后就不会进入无限递归了</li>
+<li>采用WeakMap，是因为弱引用，使用完就被垃圾回收了，避免递归内存溢出</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">deepClone</span>(<span class="hljs-params">target, map = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>()</span>)&#123;<br>           <br>    <span class="hljs-comment">// 数据类型</span><br>    <span class="hljs-keyword">let</span> type = <span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">toString</span>.<span class="hljs-title function_">call</span>(target).<span class="hljs-title function_">slice</span>(<span class="hljs-number">8</span>, -<span class="hljs-number">1</span>).<span class="hljs-title function_">toLowerCase</span>();<br><br>    <span class="hljs-comment">// 处理null和undefined, null == undefined</span><br>    <span class="hljs-keyword">if</span> (target == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> obj;<br><br>    <span class="hljs-comment">// constructor构造函数， 必须要放</span><br>    <span class="hljs-keyword">let</span> ctr = target.<span class="hljs-property">constructor</span>;<br><br>    <span class="hljs-comment">// Regexp正则和Date日期类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(regexp|date)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">ctr</span>(target);<br>    &#125;<br>    <span class="hljs-comment">// Error类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(error)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">ctr</span>(target.<span class="hljs-property">message</span>);<br>    &#125;<br>    <span class="hljs-comment">// Function类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(function)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">proxy</span>(<span class="hljs-params">...args</span>) &#123;<br>            target.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>, args);<br>        &#125;;<br>    &#125;<br>    <br>    <span class="hljs-comment">// Set类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(set)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">let</span> cloneSet = <span class="hljs-keyword">new</span> ctr;<br>        target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> &#123;<br>            cloneSet.<span class="hljs-title function_">add</span>(<span class="hljs-title function_">_deepClone</span>(item))<br>        &#125;)<br>        <span class="hljs-keyword">return</span> cloneSet;<br>    &#125;<br><br>    <span class="hljs-comment">// Map类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(map)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">let</span> cloneMap = <span class="hljs-keyword">new</span> ctr;<br>        target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item, key</span>) =&gt;</span> &#123;<br>            cloneMap.<span class="hljs-title function_">set</span>(<span class="hljs-title function_">_deepClone</span>(key), <span class="hljs-title function_">_deepClone</span>(item))<br>        &#125;)<br>        <span class="hljs-keyword">return</span> cloneMap;<br>    &#125;<br><br>    <span class="hljs-comment">// Symbol不用处理，因为Symbol(xxx)调用后返回的值不相等</span><br>    <span class="hljs-comment">// 其他数据类型原样返回，后续有处理的其他数据类型如ArrayBuffer就可以在上面继续添加</span><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-regexp">/^(array|object)$/i</span>.<span class="hljs-title function_">test</span>(type)) <span class="hljs-keyword">return</span> target;<br><br>    <span class="hljs-comment">// map中有就直接返回，不要递归了，就不会无限递归了</span><br>    <span class="hljs-keyword">if</span>(map.<span class="hljs-title function_">get</span>(target)) <span class="hljs-keyword">return</span> map.<span class="hljs-title function_">get</span>(target);<br><br>    <span class="hljs-keyword">let</span> cloneTarget = <span class="hljs-keyword">new</span> ctr;<br>    <span class="hljs-comment">// 存放对象或数组类型值的拷贝结果</span><br>    map.<span class="hljs-title function_">set</span>(target, cloneTarget);<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> target)&#123;<br>        <span class="hljs-keyword">if</span>(target.<span class="hljs-title function_">hasOwnProperty</span>(key))&#123;<br>            cloneTarget[key] = <span class="hljs-title function_">deepClone</span>(target[key], map);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> cloneTarget;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h4 id="方案二"><a href="#方案二" class="headerlink" title="方案二"></a>方案二</h4><ul>
+<li>利用WeakSet或数组来存放某个对象或者数组类型的target，发现处理过就直接返回</li>
+<li>直接返回</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">deepClone</span>(<span class="hljs-params">target, set = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakSet</span>()</span>)&#123;<br>           <br>    <span class="hljs-comment">// 数据类型</span><br>    <span class="hljs-keyword">let</span> type = <span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">toString</span>.<span class="hljs-title function_">call</span>(target).<span class="hljs-title function_">slice</span>(<span class="hljs-number">8</span>, -<span class="hljs-number">1</span>).<span class="hljs-title function_">toLowerCase</span>();<br><br>    <span class="hljs-comment">// 处理null和undefined, null == undefined</span><br>    <span class="hljs-keyword">if</span> (target == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> obj;<br><br>    <span class="hljs-comment">// constructor构造函数， 必须要放</span><br>    <span class="hljs-keyword">let</span> ctr = target.<span class="hljs-property">constructor</span>;<br><br>    <span class="hljs-comment">// Regexp正则和Date日期类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(regexp|date)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">ctr</span>(target);<br>    &#125;<br>    <span class="hljs-comment">// Error类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(error)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">ctr</span>(target.<span class="hljs-property">message</span>);<br>    &#125;<br>    <span class="hljs-comment">// Function类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(function)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">proxy</span>(<span class="hljs-params">...args</span>) &#123;<br>            target.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>, args);<br>        &#125;;<br>    &#125;<br>    <br>    <span class="hljs-comment">// Set类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(set)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">let</span> cloneSet = <span class="hljs-keyword">new</span> ctr;<br>        target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> &#123;<br>            cloneSet.<span class="hljs-title function_">add</span>(<span class="hljs-title function_">_deepClone</span>(item))<br>        &#125;)<br>        <span class="hljs-keyword">return</span> cloneSet;<br>    &#125;<br><br>    <span class="hljs-comment">// Map类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(map)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">let</span> cloneMap = <span class="hljs-keyword">new</span> ctr;<br>        target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item, key</span>) =&gt;</span> &#123;<br>            cloneMap.<span class="hljs-title function_">set</span>(<span class="hljs-title function_">_deepClone</span>(key), <span class="hljs-title function_">_deepClone</span>(item))<br>        &#125;)<br>        <span class="hljs-keyword">return</span> cloneMap;<br>    &#125;<br><br>    <span class="hljs-comment">// Symbol不用处理，因为Symbol(xxx)调用后返回的值不相等</span><br>    <span class="hljs-comment">// 其他数据类型原样返回，后续有处理的其他数据类型如ArrayBuffer就可以在上面继续添加</span><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-regexp">/^(array|object)$/i</span>.<span class="hljs-title function_">test</span>(type)) <span class="hljs-keyword">return</span> target;<br><br>    <span class="hljs-comment">// map中有就直接返回，不要递归了，就不会无限递归了</span><br>    <span class="hljs-comment">// 返回target</span><br>    <span class="hljs-comment">// if(set.has(target)) return target;</span><br>    <span class="hljs-comment">// 直接return</span><br>    <span class="hljs-keyword">if</span>(set.<span class="hljs-title function_">has</span>(target)) <span class="hljs-keyword">return</span>;<br><br>    <span class="hljs-keyword">let</span> cloneTarget = <span class="hljs-keyword">new</span> ctr;<br>    <span class="hljs-comment">// 存放对象或数组类型值的拷贝结果</span><br>    set.<span class="hljs-title function_">add</span>(target);<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> target)&#123;<br>        <span class="hljs-keyword">if</span>(target.<span class="hljs-title function_">hasOwnProperty</span>(key))&#123;<br>            cloneTarget[key] = <span class="hljs-title function_">deepClone</span>(target[key], set);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> cloneTarget<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>直接返回就相当于没有拷贝</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/16-51-51-edc0dafd8350f96358585b840723aa34-20230301165150-8eb9d3.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li>返回target，相当于没拷贝</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/01/16-54-01-0f8ffae364eac2fafb7cf081ff952919-20230301165401-4911cb.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h3 id="优化传递map"><a href="#优化传递map" class="headerlink" title="优化传递map"></a>优化传递map</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">deepClone</span>(<span class="hljs-params">obj</span>)&#123;<br>    <span class="hljs-keyword">let</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>();<br>    <span class="hljs-keyword">const</span> <span class="hljs-title function_">_deepClone</span> = (<span class="hljs-params">target</span>) =&gt; &#123;<br>        <span class="hljs-comment">// 数据类型</span><br>        <span class="hljs-keyword">let</span> type = <span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">toString</span>.<span class="hljs-title function_">call</span>(target).<span class="hljs-title function_">slice</span>(<span class="hljs-number">8</span>, -<span class="hljs-number">1</span>).<span class="hljs-title function_">toLowerCase</span>();<br><br>        <span class="hljs-comment">// 处理null和undefined, null == undefined</span><br>        <span class="hljs-keyword">if</span> (target == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> obj;<br><br>        <span class="hljs-comment">// constructor构造函数， 必须要放</span><br>        <span class="hljs-keyword">let</span> ctr = target.<span class="hljs-property">constructor</span>;<br><br>        <span class="hljs-comment">// Regexp正则和Date日期类型</span><br>        <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(regexp|date)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">ctr</span>(target);<br>        &#125;<br>        <span class="hljs-comment">// Error类型</span><br>        <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(error)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">ctr</span>(target.<span class="hljs-property">message</span>);<br>        &#125;<br>        <span class="hljs-comment">// Function类型</span><br>        <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(function)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">proxy</span>(<span class="hljs-params">...args</span>) &#123;<br>                target.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>, args);<br>            &#125;;<br>        &#125;<br>        <br>          <span class="hljs-comment">// Set类型</span><br>	    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(set)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>	        <span class="hljs-keyword">let</span> cloneSet = <span class="hljs-keyword">new</span> ctr;<br>	        target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> &#123;<br>	            cloneSet.<span class="hljs-title function_">add</span>(<span class="hljs-title function_">_deepClone</span>(item))<br>	        &#125;)<br>	        <span class="hljs-keyword">return</span> cloneSet;<br>	    &#125;<br>	<br>	    <span class="hljs-comment">// Map类型</span><br>	    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(map)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>	        <span class="hljs-keyword">let</span> cloneMap = <span class="hljs-keyword">new</span> ctr;<br>	        target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item, key</span>) =&gt;</span> &#123;<br>	            cloneMap.<span class="hljs-title function_">set</span>(<span class="hljs-title function_">_deepClone</span>(key), <span class="hljs-title function_">_deepClone</span>(item))<br>	        &#125;)<br>	        <span class="hljs-keyword">return</span> cloneMap;<br>	    &#125;<br><br>        <span class="hljs-comment">// Symbol不用处理，因为Symbol(xxx)调用后返回的值不相等</span><br>        <span class="hljs-comment">// 其他数据类型原样返回，后续有处理的其他数据类型如ArrayBuffer就可以在上面继续添加</span><br>        <span class="hljs-keyword">if</span> (!<span class="hljs-regexp">/^(array|object)$/i</span>.<span class="hljs-title function_">test</span>(type)) <span class="hljs-keyword">return</span> target;<br><br>        <span class="hljs-comment">// map中有就直接返回，不要递归了，就不会无限递归了</span><br>        <span class="hljs-keyword">if</span>(map.<span class="hljs-title function_">has</span>(target)) <span class="hljs-keyword">return</span> target;<br>        <span class="hljs-comment">// if(set.has(target)) return;</span><br><br>        <span class="hljs-keyword">let</span> cloneTarget = <span class="hljs-keyword">new</span> ctr;<br>        <span class="hljs-comment">// 存放对象或数组类型值的拷贝结果</span><br>        map.<span class="hljs-title function_">set</span>(target, cloneObj);<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> target)&#123;<br>            <span class="hljs-keyword">if</span>(target.<span class="hljs-title function_">hasOwnProperty</span>(key))&#123;<br>                cloneTarget[key] = <span class="hljs-title function_">_deepClone</span>(target[key]);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> cloneTarget;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">_deepClone</span>(obj);<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="同时支持浅拷贝和深拷贝"><a href="#同时支持浅拷贝和深拷贝" class="headerlink" title="同时支持浅拷贝和深拷贝"></a>同时支持浅拷贝和深拷贝</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">clone</span>(<span class="hljs-params">...params</span>) &#123;<br>    <span class="hljs-keyword">let</span> target = params[<span class="hljs-number">0</span>];<br>    <span class="hljs-keyword">let</span> deep = <span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">let</span> len = params.<span class="hljs-property">length</span>;<br>    <span class="hljs-comment">// 存放已经处理过的target的result结果</span><br>    <span class="hljs-keyword">let</span> map = params[<span class="hljs-number">2</span>] || <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>();<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> target === <span class="hljs-string">&#x27;boolean&#x27;</span> &amp;&amp; len &gt;= <span class="hljs-number">2</span>) &#123;<br>        deep = target;<br>        target = params[<span class="hljs-number">1</span>];<br>    &#125;<br>    <span class="hljs-comment">// 发现循环依赖就直接返回，避免进入递归，导致爆栈</span><br>    <span class="hljs-keyword">if</span> (map.<span class="hljs-title function_">has</span>(target)) <span class="hljs-keyword">return</span> map.<span class="hljs-title function_">get</span>(target);<br>    <br><br>    <span class="hljs-comment">// 数据类型</span><br>    <span class="hljs-keyword">let</span> type = <span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">toString</span>.<span class="hljs-title function_">call</span>(target).<span class="hljs-title function_">slice</span>(<span class="hljs-number">8</span>, -<span class="hljs-number">1</span>).<span class="hljs-title function_">toLowerCase</span>();<br><br>    <span class="hljs-comment">// 处理null和undefined, null == undefined</span><br>    <span class="hljs-keyword">if</span> (target == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> target;<br><br>    <span class="hljs-comment">// constructor构造函数， 必须要放</span><br>    <span class="hljs-keyword">let</span> ctr = target.<span class="hljs-property">constructor</span>;<br><br>    <span class="hljs-comment">// Regexp正则和Date日期类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(regexp|date)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">ctr</span>(target);<br>    &#125;<br>    <span class="hljs-comment">// Error类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(error)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title function_">ctr</span>(target.<span class="hljs-property">message</span>);<br>    &#125;<br>    <span class="hljs-comment">// Function类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(function)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">proxy</span>(<span class="hljs-params">...args</span>) &#123;<br>            target.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>, args);<br>        &#125;;<br>    &#125;<br>    <br>    <span class="hljs-comment">// Set类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(set)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">let</span> cloneSet = <span class="hljs-keyword">new</span> ctr;<br>        target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> &#123;<br>            cloneSet.<span class="hljs-title function_">add</span>(<span class="hljs-title function_">_deepClone</span>(item))<br>        &#125;)<br>        <span class="hljs-keyword">return</span> cloneSet;<br>    &#125;<br>	<br>    <span class="hljs-comment">// Map类型</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^(map)$/i</span>.<span class="hljs-title function_">test</span>(type)) &#123;<br>        <span class="hljs-keyword">let</span> cloneMap = <span class="hljs-keyword">new</span> ctr;<br>        target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item, key</span>) =&gt;</span> &#123;<br>            cloneMap.<span class="hljs-title function_">set</span>(<span class="hljs-title function_">_deepClone</span>(key), <span class="hljs-title function_">_deepClone</span>(item))<br>        &#125;)<br>        <span class="hljs-keyword">return</span> cloneMap;<br>    &#125;<br><br>    <span class="hljs-comment">// Symbol不用处理，因为Symbol(xxx)调用后返回的值不相等</span><br>    <span class="hljs-comment">// 其他数据类型原样返回，后续有处理的其他数据类型如ArrayBuffer就可以在上面继续添加</span><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-regexp">/^(array|object)$/i</span>.<span class="hljs-title function_">test</span>(type)) <span class="hljs-keyword">return</span> target;<br><br>    <span class="hljs-comment">// 处理对象和数组</span><br>    <span class="hljs-keyword">let</span> cloneObj = <span class="hljs-keyword">new</span> ctr;<br>    <span class="hljs-comment">// 存放该target对应的结果result</span><br>    map.<span class="hljs-title function_">set</span>(target, cloneObj);<br>    <span class="hljs-comment">// for in可以同时遍历数组和对象</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> key <span class="hljs-keyword">in</span> target) &#123;<br>        <span class="hljs-keyword">if</span> (target.<span class="hljs-title function_">hasOwnProperty</span>(key)) &#123;<br>            cloneObj[key] = deep ? <span class="hljs-title function_">clone</span>(<span class="hljs-literal">true</span>, target[key], map) : target[key];<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> cloneObj;<br>&#125;<br><br><span class="hljs-keyword">let</span> deepCopy = <span class="hljs-title function_">clone</span>(<span class="hljs-literal">true</span>, obj);<br><span class="hljs-keyword">let</span> copy = <span class="hljs-title function_">clone</span>(obj);<br></code></pre></td></tr></table></figure>
+
+<h2 id="函数类型的深拷贝"><a href="#函数类型的深拷贝" class="headerlink" title="函数类型的深拷贝"></a>函数类型的深拷贝</h2><ul>
+<li>函数拷贝有两种方案</li>
+<li>方案一返回一个代理函数，函数内部还是调用原函数，就是本文用的方案</li>
+<li>方案二new Function，方案如下</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">getType</span> = (<span class="hljs-params">obj</span>) =&gt; <span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">toString</span>.<span class="hljs-title function_">call</span>(obj)<br><br><span class="hljs-keyword">const</span> <span class="hljs-title function_">isObject</span> = (<span class="hljs-params">target</span>) =&gt;<br>  (<span class="hljs-keyword">typeof</span> target === <span class="hljs-string">&quot;object&quot;</span> || <span class="hljs-keyword">typeof</span> target === <span class="hljs-string">&quot;function&quot;</span>) &amp;&amp;<br>  target !== <span class="hljs-literal">null</span><br><br><span class="hljs-keyword">const</span> canTraverse = &#123;<br>  <span class="hljs-string">&quot;[object Map]&quot;</span>: <span class="hljs-literal">true</span>,<br>  <span class="hljs-string">&quot;[object Set]&quot;</span>: <span class="hljs-literal">true</span>,<br>  <span class="hljs-string">&quot;[object Array]&quot;</span>: <span class="hljs-literal">true</span>,<br>  <span class="hljs-string">&quot;[object Object]&quot;</span>: <span class="hljs-literal">true</span>,<br>  <span class="hljs-string">&quot;[object Arguments]&quot;</span>: <span class="hljs-literal">true</span>,<br>&#125;<br><span class="hljs-keyword">const</span> mapTag = <span class="hljs-string">&quot;[object Map]&quot;</span><br><span class="hljs-keyword">const</span> setTag = <span class="hljs-string">&quot;[object Set]&quot;</span><br><span class="hljs-keyword">const</span> boolTag = <span class="hljs-string">&quot;[object Boolean]&quot;</span><br><span class="hljs-keyword">const</span> numberTag = <span class="hljs-string">&quot;[object Number]&quot;</span><br><span class="hljs-keyword">const</span> stringTag = <span class="hljs-string">&quot;[object String]&quot;</span><br><span class="hljs-keyword">const</span> symbolTag = <span class="hljs-string">&quot;[object Symbol]&quot;</span><br><span class="hljs-keyword">const</span> dateTag = <span class="hljs-string">&quot;[object Date]&quot;</span><br><span class="hljs-keyword">const</span> errorTag = <span class="hljs-string">&quot;[object Error]&quot;</span><br><span class="hljs-keyword">const</span> regexpTag = <span class="hljs-string">&quot;[object RegExp]&quot;</span><br><span class="hljs-keyword">const</span> funcTag = <span class="hljs-string">&quot;[object Function]&quot;</span><br><br><span class="hljs-keyword">const</span> <span class="hljs-title function_">handleRegExp</span> = (<span class="hljs-params">target</span>) =&gt; &#123;<br>  <span class="hljs-keyword">const</span> &#123; source, flags &#125; = target<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> target.<span class="hljs-title function_">constructor</span>(<span class="hljs-params">source, flags</span>)<br>&#125;<br><br><span class="hljs-keyword">const</span> <span class="hljs-title function_">handleFunc</span> = (<span class="hljs-params">func</span>) =&gt; &#123;<br>  <span class="hljs-comment">// 箭头函数直接返回自身</span><br>  <span class="hljs-keyword">if</span> (!func.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>) <span class="hljs-keyword">return</span> func<br>  <span class="hljs-keyword">const</span> bodyReg = <span class="hljs-regexp">/(?&lt;=&#123;)(.|\n)+(?=&#125;)/m</span><br>  <span class="hljs-keyword">const</span> paramReg = <span class="hljs-regexp">/(?&lt;=\().+(?=\)\s+&#123;)/</span><br>  <span class="hljs-keyword">const</span> funcString = func.<span class="hljs-title function_">toString</span>()<br>  <span class="hljs-comment">// 分别匹配 函数参数 和 函数体</span><br>  <span class="hljs-keyword">const</span> param = paramReg.<span class="hljs-title function_">exec</span>(funcString)<br>  <span class="hljs-keyword">const</span> body = bodyReg.<span class="hljs-title function_">exec</span>(funcString)<br>  <span class="hljs-keyword">if</span> (!body) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span><br>  <span class="hljs-keyword">if</span> (param) &#123;<br>    <span class="hljs-keyword">const</span> paramArr = param[<span class="hljs-number">0</span>].<span class="hljs-title function_">split</span>(<span class="hljs-string">&quot;,&quot;</span>)<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Function</span>(...paramArr, body[<span class="hljs-number">0</span>])<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Function</span>(body[<span class="hljs-number">0</span>])<br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">const</span> <span class="hljs-title function_">handleNotTraverse</span> = (<span class="hljs-params">target, tag</span>) =&gt; &#123;<br>  <span class="hljs-keyword">const</span> <span class="hljs-title class_">Ctor</span> = target.<span class="hljs-property">constructor</span><br>  <span class="hljs-keyword">switch</span> (tag) &#123;<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">boolTag</span>:<br>      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>(<span class="hljs-title class_">Boolean</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">valueOf</span>.<span class="hljs-title function_">call</span>(target))<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">numberTag</span>:<br>      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>(<span class="hljs-title class_">Number</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">valueOf</span>.<span class="hljs-title function_">call</span>(target))<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">stringTag</span>:<br>      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>(<span class="hljs-title class_">String</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">valueOf</span>.<span class="hljs-title function_">call</span>(target))<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">symbolTag</span>:<br>      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>(<span class="hljs-title class_">Symbol</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">valueOf</span>.<span class="hljs-title function_">call</span>(target))<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">errorTag</span>:<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">dateTag</span>:<br>      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Ctor</span>(target)<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">regexpTag</span>:<br>      <span class="hljs-keyword">return</span> <span class="hljs-title function_">handleRegExp</span>(target)<br>    <span class="hljs-keyword">case</span> <span class="hljs-attr">funcTag</span>:<br>      <span class="hljs-keyword">return</span> <span class="hljs-title function_">handleFunc</span>(target)<br>    <span class="hljs-attr">default</span>:<br>      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Ctor</span>(target)<br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">const</span> <span class="hljs-title function_">deepClone</span> = (<span class="hljs-params">target, map = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>()</span>) =&gt; &#123;<br>  <span class="hljs-keyword">if</span> (!<span class="hljs-title function_">isObject</span>(target)) <span class="hljs-keyword">return</span> target<br>  <span class="hljs-keyword">let</span> type = <span class="hljs-title function_">getType</span>(target)<br>  <span class="hljs-keyword">let</span> cloneTarget<br>  <span class="hljs-keyword">if</span> (!canTraverse[type]) &#123;<br>    <span class="hljs-comment">// 处理不能遍历的对象</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">handleNotTraverse</span>(target, type)<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-comment">// 这波操作相当关键，可以保证对象的原型不丢失！</span><br>    <span class="hljs-keyword">let</span> ctor = target.<span class="hljs-property">constructor</span><br>    cloneTarget = <span class="hljs-keyword">new</span> <span class="hljs-title function_">ctor</span>()<br>  &#125;<br><br>  <span class="hljs-keyword">if</span> (map.<span class="hljs-title function_">get</span>(target)) <span class="hljs-keyword">return</span> target<br>  map.<span class="hljs-title function_">set</span>(target, <span class="hljs-literal">true</span>)<br><br>  <span class="hljs-keyword">if</span> (type === mapTag) &#123;<br>    <span class="hljs-comment">//处理Map</span><br>    target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item, key</span>) =&gt;</span> &#123;<br>      cloneTarget.<span class="hljs-title function_">set</span>(<span class="hljs-title function_">deepClone</span>(key, map), <span class="hljs-title function_">deepClone</span>(item, map))<br>    &#125;)<br>  &#125;<br><br>  <span class="hljs-keyword">if</span> (type === setTag) &#123;<br>    <span class="hljs-comment">//处理Set</span><br>    target.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> &#123;<br>      cloneTarget.<span class="hljs-title function_">add</span>(<span class="hljs-title function_">deepClone</span>(item, map))<br>    &#125;)<br>  &#125;<br><br>  <span class="hljs-comment">// 处理数组和对象</span><br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> prop <span class="hljs-keyword">in</span> target) &#123;<br>    <span class="hljs-keyword">if</span> (target.<span class="hljs-title function_">hasOwnProperty</span>(prop)) &#123;<br>      cloneTarget[prop] = <span class="hljs-title function_">deepClone</span>(target[prop], map)<br>    &#125;<br>  &#125;<br>  <span class="hljs-keyword">return</span> cloneTarget<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/blog/categories/JavaScript/" class="category-chain-item">JavaScript</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/%E6%BA%90%E7%A0%81/">#源码</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>手撕JavaScript深拷贝&amp;浅拷贝</div>
+      <div>https://retech-fe.github.io/blog/2023/03/01/deepclone/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>pengfei.zuo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年3月1日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2022/11/04/design-pattern-proxy/" title="设计模式之代理模式">
+                        <span class="hidden-mobile">设计模式之代理模式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'retech-fe/blog');
+      s.setAttribute('issue-term', 'pathname');
+      
+      s.setAttribute('label', 'utterances');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io/zh-cn/" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> | <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
