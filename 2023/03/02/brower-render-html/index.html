@@ -13,29 +13,33 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="pengfei.zuo">
+  <meta name="author" content="高红翔">
   <meta name="keywords" content="">
   
-    <meta name="description" content="主要讲解使用A记录和CNAME的概念及进行域名解析的区别。">
+    <meta name="description" content="在这篇文章中，讲解了浏览器把HTML文档请求回来后的渲染流水线。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="域名解析 | A记录 ，CNAME，MX你懂了吗？">
-<meta property="og:url" content="https://retech-fe.github.io/blog/2022/08/23/dns-cname/index.html">
+<meta property="og:title" content="浏览器渲染过程">
+<meta property="og:url" content="https://retech-fe.github.io/blog/2023/03/02/brower-render-html/index.html">
 <meta property="og:site_name" content="Re:Tech FE Blog">
-<meta property="og:description" content="主要讲解使用A记录和CNAME的概念及进行域名解析的区别。">
+<meta property="og:description" content="在这篇文章中，讲解了浏览器把HTML文档请求回来后的渲染流水线。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://files.mdnice.com/user/13996/cd5eff55-8573-4395-8e7f-80d319fc85cf.png">
-<meta property="article:published_time" content="2022-08-23T13:11:02.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Gao-Hongxiang/image-hosting/master/img/20230222182009.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ghx9908/image-hosting/master/img/20230223105757.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ghx9908/image-hosting/master/img/20230223105953.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ghx9908/image-hosting/master/img/20230223110101.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ghx9908/image-hosting/master/img/20230223124225.png">
+<meta property="article:published_time" content="2023-03-02T09:29:02.000Z">
 <meta property="article:modified_time" content="2023-03-02T01:34:42.578Z">
 <meta property="article:author" content="Re:Tech FE">
-<meta property="article:tag" content="网络">
+<meta property="article:tag" content="浏览器原理">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://files.mdnice.com/user/13996/cd5eff55-8573-4395-8e7f-80d319fc85cf.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Gao-Hongxiang/image-hosting/master/img/20230222182009.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>域名解析 | A记录 ，CNAME，MX你懂了吗？ - Re:Tech FE Blog</title>
+  <title>浏览器渲染过程 - Re:Tech FE Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -227,7 +231,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="域名解析 | A记录 ，CNAME，MX你懂了吗？"></span>
+            <span id="subtitle" data-typed-text="浏览器渲染过程"></span>
           
         </div>
 
@@ -237,14 +241,14 @@
     
       <span class="post-meta mr-2">
         <i class="iconfont icon-author" aria-hidden="true"></i>
-        pengfei.zuo
+        高红翔
       </span>
     
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-08-23 13:11" pubdate>
-          2022年8月23日 下午
+        <time datetime="2023-03-02 09:29" pubdate>
+          2023年3月2日 上午
         </time>
       </span>
     
@@ -312,48 +316,117 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">域名解析 | A记录 ，CNAME，MX你懂了吗？</h1>
+            <h1 style="display: none">浏览器渲染过程</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h2><p>什么是域名解析？</p>
-<p>域名解析就是国际域名、国内域名、中文域名等域名申请后做的到IP地址的转换过程。IP地址是网路上标识您站点的数字地址，为了简单好记，采用域名来代替ip地址标识站点地址。域名的解析工作由<code>DNS</code>服务器完成。</p>
-<p>如下图，百度 <code>www.baidu.com</code> 就是域名，解析出来的<code>IP</code> <code>39.156.66.10</code> 这个过程就是域名解析。<br><img src="https://files.mdnice.com/user/13996/cd5eff55-8573-4395-8e7f-80d319fc85cf.png" srcset="/blog/img/loading.gif" lazyload></p>
-<h2 id="A-记录"><a href="#A-记录" class="headerlink" title="A 记录"></a>A 记录</h2><p><code>A (Address)记录</code>是用来指定主机名（或域名）对应的IP地址记录。用户可以将该域名下的网站服务器指向到自己的<code>web server</code>上。同时也可以设置您域名的二级域名。</p>
-<p>又称IP指向，用户可以在此设置子域名并指向到自己的目标主机地址上，从而实现通过域名找到服务器。</p>
-<p>  指向的目标主机地址类型只能使用IP地址；</p>
-<ul>
-<li>1.如何添加A记录</li>
+                <h2 id="1-进程架构"><a href="#1-进程架构" class="headerlink" title="1. 进程架构"></a>1. 进程架构</h2><h3 id="1-1-进程和线程"><a href="#1-1-进程和线程" class="headerlink" title="1.1 进程和线程"></a>1.1 进程和线程</h3><ul>
+<li>当启动一个程序时，操作系统会为该程序分配内存，用来存放代码、运行过程中的数据，这样的运行环境叫做<code>进程</code></li>
+<li>一个进程可以启动和管理多个线程，线程之间可以共享进行数据，任何一个线程出错都可能会导致进程崩溃</li>
 </ul>
-<p>  在“主机名”中填入子域的名字，“类型”为A，“IP地址&#x2F;主机名”中填入web服务器的IP地址，点击“新增”按钮即可。</p>
-<p>  注：如果“主机名”一栏为空则表示对域名mydomain.com本身做指向。</p>
-<ul>
-<li>2.泛域名解析</li>
+<h3 id="1-2-Chrome-的进程架构"><a href="#1-2-Chrome-的进程架构" class="headerlink" title="1.2 Chrome 的进程架构"></a>1.2 Chrome 的进程架构</h3><ul>
+<li>浏览器主进程 负责界面显示、用户交互和子进程管理</li>
+<li>渲染进程 排版引擎和 V8 引擎运行在该进程中，负责把 HTML、CSS 和 JavaScript 转变成网页</li>
+<li>网络进程 用来加载网络资源的</li>
+<li>GPU 进程 用来实现 CSS3 和 3D 效果</li>
 </ul>
-<p>  即将该域名所有未指定的子域名都指向一个空间。</p>
-<p>  在“主机名”中填入*，“类型”为A，“IP地址&#x2F;主机名”中填入web服务器的IP地址。</p>
-<h2 id="CNAME记录"><a href="#CNAME记录" class="headerlink" title="CNAME记录"></a>CNAME记录</h2><p>  通常称别名指向。</p>
-<p>  这种记录允许您将多个名字映射到另外一个域名。</p>
-<p>  您可以为一个主机设置别名。比如设置test.mydomain.com，用来指向一个主机<a target="_blank" rel="noopener" href="http://www.rddns.com那么以后就可以用test.mydomain.com来代替访问www.rddns.com了./">www.rddns.com那么以后就可以用test.mydomain.com来代替访问www.rddns.com了。</a></p>
-<p>  - CNAME的目标主机地址只能使用主机名，不能使用IP地址；</p>
-<p>  - 主机名前不能有任何其他前缀，如：http:&#x2F;&#x2F;等是不被允许的；</p>
-<p>  - A记录优先于CNAME记录。即如果一个主机地址同时存在A记录和CNAME记录，则CNAME记录不生效。
- </p>
-<h2 id="MX-记录"><a href="#MX-记录" class="headerlink" title="MX 记录"></a>MX 记录</h2><p>  邮件交换记录。</p>
-<p>  用于将以该域名为结尾的电子邮件指向对应的邮件服务器以进行处理。如：用户所用的邮件是以域名mydomain.com为结尾的，则需要在管理界面中添加该域名的MX记录来处理所有以@mydomain.com结尾的邮件。</p>
-<p>  - MX记录可以使用主机名或IP地址；</p>
-<p>  - MX记录可以通过设置优先级实现主辅服务器设置，“优先级”中的数字越小表示级别越高。也可以使用相同优先级达到负载均衡的目的；</p>
-<p>  - 如果在“主机名”中填入子域名则此MX记录只对该子域名生效。
- </p>
-<h2 id="使用A记录和CNAME进行域名解析的区别"><a href="#使用A记录和CNAME进行域名解析的区别" class="headerlink" title="使用A记录和CNAME进行域名解析的区别?"></a>使用A记录和CNAME进行域名解析的区别?</h2><p>A记录就是把一个域名解析到一个IP地址（Address，特制数字IP地址），而CNAME记录就是把域名解析到另外一个域名。</p>
-<p>其功能是差不多，CNAME将几个主机名指向一个别名，其实跟指向IP地址是一样的，因为这个别名也要做一个A记录的。</p>
-<p>但是使用CNAME记录可以很方便地变更IP地址。如果一台服务器有100个网站，他们都做了别名，该台服务器变更IP时，只需要变更别名的A记录就可以了。</p>
-<h2 id="使用A记录和CNAME哪个好？"><a href="#使用A记录和CNAME哪个好？" class="headerlink" title="使用A记录和CNAME哪个好？"></a>使用A记录和CNAME哪个好？</h2><p>域名解析CNAME记录A记录哪一种比较好？</p>
-<p>如果论对网站的影响，就没有多大区别。但是：CNAME有一个好处就是稳定，就好像一个IP与一个域名的区别。服务商从方便维护的角度，一般也建议用户使用CNAME记录绑定域名的。如果主机使用了双线IP，显然使用CNAME也要方便一些。</p>
-<p>A记录也有一些好处，例如可以在输入域名时不用输入WWW.来访问网站哦！从SEO优化角度来看，一些搜索引擎如alex或一些搜索查询工具网站等等则默认是自动去掉WWW.来辨别网站，CNAME记录是必须有如：WWW(别名)前缀的域名，有时候会遇到这样的麻烦，前缀去掉了默认网站无法访问。</p>
-<p>有人认为，在SEO优化网站的时候，由于搜索引擎找不到去掉WWW.的域名时，对网站权重也会有些影响。因为有些网民客户也是不喜欢多写三个W来访问网站的，网站无法访问有少量网民客户会放弃继续尝试加WWW.访问域名了，因此网站访问浏览量也会减少一些。</p>
-<p>也有人认为同一个域名加WWW.和不加WWW.访问网站也会使网站权重分散，这也是个问题。但是可以使用301跳转把不加WWW.跳转到加WWW.的域名，问题就解决了</p>
+<h2 id="2-加载-HTML"><a href="#2-加载-HTML" class="headerlink" title="2. 加载 HTML"></a>2. 加载 HTML</h2><ul>
+<li>(1)主进程接收用户输入的 URL</li>
+<li>(2)主进程把该 URL 转发给网络进程</li>
+<li>(3)在网络进程中发起 URL 请求</li>
+<li>(4)网络进程接收到响应头数据并转发给主进程</li>
+<li>(5)主进程发送提交导航消息到渲染进程</li>
+<li>(6)渲染进程开始从网络进程接收 HTML 数据</li>
+<li>(7)HTML 接收接受完毕后通知主进程确认导航</li>
+<li>(8)渲染进程开始 HTML 解析和加载子资源</li>
+<li>(9)HTML 解析完毕和加载子资源页面加载完成后会通知主进程页面加载完成</li>
+</ul>
+<h2 id="3-渲染流水线"><a href="#3-渲染流水线" class="headerlink" title="3. 渲染流水线"></a>3. 渲染流水线</h2><ul>
+<li>（1) 渲染进程把 HTML 转变为 DOM 树型结构</li>
+<li>（2) 渲染进程把 CSS 文本转为浏览器中的<code>stylesheet</code></li>
+<li>（3) 通过 stylesheet 计算出 DOM 节点的样式</li>
+<li>（4) 根据 DOM 树创建布局树</li>
+<li>（5) 并计算各个元素的布局信息</li>
+<li>（6) 根据布局树生成分层树</li>
+<li>（7) 根据分层树进行生成绘制步骤</li>
+<li>（8) 把绘制步骤交给渲染进程中的合成线程进行合成</li>
+<li>（9) 合成线程将图层分成图块(tile)</li>
+<li>（10) 合成线程会把分好的图块发给栅格化线程池，栅格化线程会把图片(tile)转化为位图</li>
+<li>（11) 而其实栅格化线程在工作的时候会把栅格化的工作交给 GPU 进程来完成，最终生成的位图就保存在了<code>GPU</code>内存中</li>
+<li>（12) 当所有的图块都光栅化之后合成线程会发送绘制图块的命令给浏览器主进程</li>
+<li>（13) 浏览器主进程然后会从 GPU 内存中取出位图显示到页面上</li>
+</ul>
+<h3 id="3-1-HTML-转-DOM-树"><a href="#3-1-HTML-转-DOM-树" class="headerlink" title="3.1 HTML 转 DOM 树"></a>3.1 HTML 转 DOM 树</h3><ul>
+<li>浏览器中的 HTML 解析器可以把 HTML 字符串转换成 DOM 结构</li>
+<li>HTML 解析器边接收网络数据边解析 HTML</li>
+<li>解析 DOM<ul>
+<li>HTML 字符串转 Token</li>
+<li>Token 栈用来维护节点之间的父子关系，Token 会依次压入栈中</li>
+<li>如果是开始标签，把 Token 压入栈中并且创建新的 DOM 节点并添加到父节点的 children 中</li>
+<li>如果是文本 Token，则把文本节点添加到栈顶元素的 children 中，文本 Token 不需要入栈</li>
+<li>如果是结束标签，此开始标签出栈</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-CSS-转-stylesheet"><a href="#3-2-CSS-转-stylesheet" class="headerlink" title="3.2 CSS 转 stylesheet"></a>3.2 CSS 转 stylesheet</h3><ul>
+<li>渲染进程把 CSS 文本转为浏览器中的<code>stylesheet</code></li>
+<li>CSS 来源可能有 link 标签、style 标签和 style 行内样式</li>
+<li>渲染引擎会把 CSS 转换为<code>document.styleSheets</code></li>
+</ul>
+<h3 id="3-3-计算出-DOM-节点的样式"><a href="#3-3-计算出-DOM-节点的样式" class="headerlink" title="3.3 计算出 DOM 节点的样式"></a>3.3 计算出 DOM 节点的样式</h3><ul>
+<li>根据 CSS 的继承和层叠规则计算 DOM 节点的样式</li>
+<li>DOM 节点的样式保存在了<code>ComputedStyle</code>中</li>
+</ul>
+<h3 id="3-4-创建布局树"><a href="#3-4-创建布局树" class="headerlink" title="3.4 创建布局树"></a>3.4 创建布局树</h3><ul>
+<li>创建一棵只包含可见元素的布局树</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Gao-Hongxiang/image-hosting/master/img/20230222182009.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h3 id="3-5-计算布局"><a href="#3-5-计算布局" class="headerlink" title="3.5 计算布局"></a>3.5 计算布局</h3><ul>
+<li>计算各个元素的布局</li>
+</ul>
+<h3 id="3-6-生成分层树"><a href="#3-6-生成分层树" class="headerlink" title="3.6 生成分层树"></a>3.6 生成分层树</h3><ul>
+<li>根据布局树生成分层树</li>
+<li>渲染引擎需要为某些节点生成单独的图层，并组合成图层树<ul>
+<li>z-index</li>
+<li>绝对定位和固定定位</li>
+<li>滤镜</li>
+<li>透明</li>
+<li>裁剪</li>
+</ul>
+</li>
+<li>这些图层合成最终的页面</li>
+</ul>
+<h3 id="3-6-绘制"><a href="#3-6-绘制" class="headerlink" title="3.6 绘制"></a>3.6 绘制</h3><ul>
+<li>根据分层树进行生成绘制步骤复合图层</li>
+<li>每个图层会拆分成多个绘制指令，这些指令组合在一起成为绘制列表</li>
+</ul>
+<h3 id="3-7-合成线程"><a href="#3-7-合成线程" class="headerlink" title="3.7 合成线程"></a>3.7 合成线程</h3><ul>
+<li>合成线程将图层分成图块(tile)</li>
+<li>合成线程会把分好的图块发给栅格化线程池，栅格化线程会把图片(tile)转化为位图</li>
+<li>而其实栅格化线程在工作的时候会把栅格化的工作交给 GPU 进程来完成，最终生成的位图就保存在了<code>GPU</code>内存中</li>
+<li>当所有的图块都光栅化之后合成线程会发送绘制图块的命令给浏览器主进程</li>
+<li>浏览器主进程然后会从 GPU 内存中取出位图显示到页面上</li>
+<li>合成线程</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/ghx9908/image-hosting/master/img/20230223105757.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h3 id="3-7-1-图块"><a href="#3-7-1-图块" class="headerlink" title="3.7.1 图块"></a>3.7.1 图块</h3><ul>
+<li>图块渲染也称基于瓦片渲染或基于小方块渲染</li>
+<li>它是一种通过规则的网格细分计算机图形图像并分别渲染图块(tile)各部分的过程</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/ghx9908/image-hosting/master/img/20230223105953.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h3 id="3-7-2-栅格化"><a href="#3-7-2-栅格化" class="headerlink" title="3.7.2 栅格化"></a>3.7.2 栅格化</h3><ul>
+<li>栅格化是将矢量图形格式表示的图像转换成位图以用于显示器输出的过程</li>
+<li>栅格即像素</li>
+<li>栅格化即将矢量图形转化为位图(栅格图像)</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/ghx9908/image-hosting/master/img/20230223110101.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h3 id="3-8-资源加载"><a href="#3-8-资源加载" class="headerlink" title="3.8 资源加载"></a>3.8 资源加载</h3><ul>
+<li>CSS 加载不会影响 DOM 解析</li>
+<li>CSS 加载不会阻塞 JS 加载，但是会阻塞 JS 执行</li>
+<li>JS 会依赖 CSS 加载，JS 会阻塞 DOM 解析</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/ghx9908/image-hosting/master/img/20230223124225.png" srcset="/blog/img/loading.gif" lazyload></p>
 
                 
               </div>
@@ -372,7 +445,7 @@
     
       <span class="category-chain">
         
-  <a href="/blog/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  <a href="/blog/categories/brower/" class="category-chain-item">brower</a>
   
   
 
@@ -387,7 +460,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/blog/tags/%E7%BD%91%E7%BB%9C/">#网络</a>
+        <a href="/blog/tags/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86/">#浏览器原理</a>
       
     </div>
   
@@ -399,20 +472,20 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>域名解析 | A记录 ，CNAME，MX你懂了吗？</div>
-      <div>https://retech-fe.github.io/blog/2022/08/23/dns-cname/</div>
+      <div>浏览器渲染过程</div>
+      <div>https://retech-fe.github.io/blog/2023/03/02/brower-render-html/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>作者</div>
-          <div>pengfei.zuo</div>
+          <div>高红翔</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年8月23日</div>
+          <div>2023年3月2日</div>
         </div>
       
       
@@ -442,18 +515,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2022/08/28/docker-cicd/" title="如何使用 docker 部署前端项目">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">如何使用 docker 部署前端项目</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2022/08/05/mock-new%20/" title="JavaScript中new操作符的原理">
-                        <span class="hidden-mobile">JavaScript中new操作符的原理</span>
+                      <a href="/blog/2023/03/01/deepclone/" title="手撕JavaScript深拷贝&amp;浅拷贝">
+                        <span class="hidden-mobile">手撕JavaScript深拷贝&amp;浅拷贝</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
