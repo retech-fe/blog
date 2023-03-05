@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/blog/img/bg/favicon.png">
+  <link rel="icon" href="/blog/img/bg/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="pengfei.zuo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在这篇文章中，讲解了什么是异步传染性及如何解决该问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="消除异步的传染性">
+<meta property="og:url" content="https://retech-fe.github.io/blog/2023/03/05/async-remove/index.html">
+<meta property="og:site_name" content="Re:Tech FE Blog">
+<meta property="og:description" content="在这篇文章中，讲解了什么是异步传染性及如何解决该问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/05/19-06-08-6ca06f1f65321258ed4389befc8b2e30-20230305190607-4bc15a.png">
+<meta property="article:published_time" content="2023-03-05T21:37:02.000Z">
+<meta property="article:modified_time" content="2023-03-05T13:38:27.848Z">
+<meta property="article:author" content="Re:Tech FE">
+<meta property="article:tag" content="ES6">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/05/19-06-08-6ca06f1f65321258ed4389befc8b2e30-20230305190607-4bc15a.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>消除异步的传染性 - Re:Tech FE Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"retech-fe.github.io","root":"/blog/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/blog/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/blog/js/utils.js" ></script>
+  <script  src="/blog/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/blog/">
+      <strong>Re:Tech FE&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/blog/img/bg/4.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="消除异步的传染性"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        pengfei.zuo
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-03-05 21:37" pubdate>
+          2023年3月5日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          27 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">消除异步的传染性</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="什么是异步传染性？"><a href="#什么是异步传染性？" class="headerlink" title="什么是异步传染性？"></a>什么是异步传染性？</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-comment">//  封装了一个ajax请求</span><br><span class="hljs-comment">//  内部使用了await，所以函数也要标记为async</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">doRequest</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-comment">//  fetech请求是异步，所以要用await</span><br>    <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://jsonplaceholder.typicode.com/todos/1&#x27;</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">resp</span>) =&gt;</span> resp.<span class="hljs-title function_">json</span>())<br>&#125;<br><br><span class="hljs-comment">// m1调用了doRequest函数，doRequest是async函数，所以也得标记async</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">m1</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">doRequest</span>();<br>&#125;<br><br><span class="hljs-comment">// m2调用了m1 函数，m1是async函数，所以也得标记async</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">m2</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">m1</span>();<br>&#125;<br><br><span class="hljs-comment">// m3调用了m2函数，m2是async函数，所以也得标记async</span><br><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">m3</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> <span class="hljs-title function_">m2</span>();<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>fetch这个节点是异步的造成了连锁反应</li>
+<li>一个节点发生了异步，这个节点的所有调用链路全部都得异步</li>
+<li>函数式编程的场景，m1、m2、m3就不是纯函数了，全部变成了副作用</li>
+<li></li>
+</ul>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
+<li>去掉所有的async await，改成同步调用</li>
+<li>直接返回结果（ps: 异步的怎么会马上、立刻、直接返回结果呢？）</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">doRequest</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://jsonplaceholder.typicode.com/todos/1&#x27;</span>);<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">m1</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">doRequest</span>();<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">m2</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">m1</span>();<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">m3</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">m2</span>();<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"></span>) &#123;<br>	<span class="hljs-keyword">const</span> res = <span class="hljs-title function_">m3</span>();<br>	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="怎么消除异步？"><a href="#怎么消除异步？" class="headerlink" title="怎么消除异步？"></a>怎么消除异步？</h2><ul>
+<li>异步肯定不能马上、立刻、直接返回结果</li>
+<li>只有报错这一条路</li>
+<li>把promise作为异常抛出</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/05/19-06-08-6ca06f1f65321258ed4389befc8b2e30-20230305190607-4bc15a.png" srcset="/blog/img/loading.gif" lazyload></p>
+<ul>
+<li>函数开始执行，调用fetch发送请求</li>
+<li>不用等待fetch请求的返回结果，直接把fetch请求返回的promoise实例作为异常抛出</li>
+<li>fetch请求是异步的，需要把真正请求的返回值缓存起来，供后面的逻辑使用</li>
+<li>对真正的要执行的函数用try-catch包裹，捕获刚刚抛出的异常</li>
+<li>如果捕获的异常对象是Promise的实例， 就监听其成功或失败状态，成功或者失败后重新发起请求</li>
+<li>重新发起请求，会从缓存中直接获取上次请求缓存下的结果</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">doRequest</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://jsonplaceholder.typicode.com/todos/1&#x27;</span>);<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">m1</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">doRequest</span>();<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">m2</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">m1</span>();<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">m3</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">m2</span>();<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">const</span> res = <span class="hljs-title function_">m3</span>();<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res);<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">run</span>(<span class="hljs-params">func</span>) &#123;<br>    <span class="hljs-comment">// 缓存</span><br>    <span class="hljs-keyword">let</span> cache = [];<br>    <span class="hljs-comment">// 请求索引</span><br>    <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">// 原生fetch</span><br>    <span class="hljs-keyword">let</span> _originFetch = <span class="hljs-variable language_">window</span>.<span class="hljs-property">fetch</span>;<br>    <span class="hljs-comment">// 劫持fetch函数-代理原生fetch</span><br>    <span class="hljs-comment">// 新fetch的核心功能： 1. 发送请求 2.报错</span><br>    <span class="hljs-variable language_">window</span>.<span class="hljs-property">fetch</span> = <span class="hljs-function">(<span class="hljs-params">...args</span>) =&gt;</span> &#123;<br>        <span class="hljs-keyword">if</span> (cache[i]) &#123;<br>            <span class="hljs-keyword">if</span> (cache[i].<span class="hljs-property">status</span> === <span class="hljs-string">&#x27;fullfilled&#x27;</span>) &#123;<br>                <span class="hljs-keyword">return</span> cache[i].<span class="hljs-property">data</span>;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (cache[i].<span class="hljs-property">status</span> === <span class="hljs-string">&#x27;rejected&#x27;</span>) &#123;<br>                <span class="hljs-keyword">throw</span> cache[i].<span class="hljs-property">err</span>;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">const</span> result = &#123;<br>            <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;pending&#x27;</span>,<br>            <span class="hljs-attr">data</span>: <span class="hljs-literal">null</span>,<br>            <span class="hljs-attr">err</span>: <span class="hljs-literal">null</span>,<br>        &#125;<br>        cache[i++] = result;<br><br>        <span class="hljs-comment">// 发送异步请求</span><br>        <span class="hljs-keyword">const</span> promise = <span class="hljs-title function_">_originFetch</span>(...args)<br>            .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">resp</span> =&gt;</span> resp.<span class="hljs-title function_">json</span>())<br>            .<span class="hljs-title function_">then</span>(<span class="hljs-function"><span class="hljs-params">resp</span> =&gt;</span> &#123;<br>                result.<span class="hljs-property">status</span> = <span class="hljs-string">&#x27;fullfilled&#x27;</span>;<br>                result.<span class="hljs-property">data</span> = resp;<br>            &#125;, <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> &#123;<br>                result.<span class="hljs-property">status</span> = <span class="hljs-string">&#x27;rejected&#x27;</span>;<br>                result.<span class="hljs-property">err</span> = err;<br>            &#125;);<br>        <br>        <br>        <span class="hljs-comment">// 马上报错， 让函数强制执行完毕，不用等异步回来才往下执行</span><br>        <span class="hljs-comment">// 把原生fetch的promise作为错误直接抛出去，让fetch马上结束</span><br>        <span class="hljs-keyword">throw</span> promise;<br>    &#125;<br><br>    <span class="hljs-comment">// 劫持原生fetch函数报错后，就会try-catch住</span><br>    <span class="hljs-keyword">try</span> &#123;<br>        <span class="hljs-comment">// 运行传入的函数</span><br>        <span class="hljs-title function_">func</span>();<br>    &#125; <span class="hljs-keyword">catch</span> (err) &#123;<br>        <span class="hljs-keyword">if</span> (err <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Promise</span>) &#123;<br>            <span class="hljs-keyword">const</span> <span class="hljs-title function_">reRun</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>            	    <span class="hljs-comment">// index 置零</span><br>                i = <span class="hljs-number">0</span>;<br>                <span class="hljs-comment">// 重新发起请求</span><br>                <span class="hljs-title function_">func</span>()<br>            &#125;<br>            	<span class="hljs-comment">// 异步请求成功或者失败都重新执行原来的函数</span><br>            err.<span class="hljs-title function_">then</span>(reRun, reRun);<br>        &#125;<br>    &#125;<br>    <br>&#125;<br><br><span class="hljs-title function_">run</span>(main);<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="React中的应用"><a href="#React中的应用" class="headerlink" title="React中的应用"></a>React中的应用</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><br><span class="hljs-keyword">const</span> userResource = <span class="hljs-keyword">get</span>	<span class="hljs-title function_">UserResource</span>();<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">ProfilePage</span> () &#123;<br>	<span class="hljs-keyword">return</span>  (<br>		<span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span> <span class="hljs-attr">fallback</span>=<span class="hljs-string">&#123;</span>&lt;<span class="hljs-attr">h1</span>&gt;</span>Loading...<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>&#125;&gt;</span><br><span class="language-xml">			<span class="hljs-tag">&lt;<span class="hljs-name">ProfileDetails</span> /&gt;</span></span><br><span class="language-xml">		<span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span></span><br>	)<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">ProfileDetails</span> () &#123;<br>	<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">1</span>)<br>	<span class="hljs-comment">// 直接throw一个Promise则一直处于loading状态</span><br>	<span class="hljs-comment">// throw new Promise();</span><br>	<span class="hljs-keyword">const</span> user = userResource.<span class="hljs-title function_">read</span>();<br>	<span class="hljs-keyword">return</span> <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>&#123;user.name&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>Suspense里面子组件ProfileDetails的状态，请求中就显示loading，返回结果后就显示用户详情</li>
+<li>React中ProfileDetails组件没有返回Promise，就是一个普通的组件</li>
+<li>1会打印两次</li>
+<li>和上面的原理一样，先执行ProfileDetails，会打印第一次，直接throw一个promoise的异常</li>
+<li>成功后继续再执行一次，然后打印第二次</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/blog/categories/JavaScript/" class="category-chain-item">JavaScript</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/blog/tags/ES6/">#ES6</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>消除异步的传染性</div>
+      <div>https://retech-fe.github.io/blog/2023/03/05/async-remove/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>pengfei.zuo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年3月5日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/blog/2023/03/02/brower-render-html/" title="浏览器渲染过程">
+                        <span class="hidden-mobile">浏览器渲染过程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'retech-fe/blog');
+      s.setAttribute('issue-term', 'pathname');
+      
+      s.setAttribute('label', 'utterances');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io/zh-cn/" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> | <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/blog/js/events.js" ></script>
+<script  src="/blog/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/blog/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
