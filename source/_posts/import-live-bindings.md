@@ -26,7 +26,7 @@ console.log(n)// 1
 
 ![](https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/10-11-48-c9ffa534710aeda4c39533dbc991dd44-20230306101148-da3953.png)
 
-+ 上面的底阿妈在做解构赋值
++ 上面的代码在做解构赋值
 + 解构赋值的英文全称是： Destructuring assignment
 + 解构赋值 => 解构 + 赋值；重点是赋值
 + 对于obj中的n是基本数据类型，解构出来obj中n的值是1，然后赋值给一个新的变量n，他的值是拷贝过来的，在内存中是独立的两份内存空间
