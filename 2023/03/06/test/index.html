@@ -16,24 +16,33 @@
   <meta name="author" content="pengfei.zuo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在这篇文章中，对&#96;Docker&#96;中&#96;ADD&#96;和&#96;COPY&#96;的这两个命令进行了解释和对比，你将知道如何选择来使用它们。">
+    <meta name="description" content="在这篇文章中，讲了圈复杂度的概念、计算公式及如何配置eslint开启圈复杂度，如何解决圈复杂度过高的问题。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Docker中ADD和COPY的区别">
-<meta property="og:url" content="https://retech-fe.github.io/blog/2022/09/10/docker-add-copy/index.html">
+<meta property="og:title" content="圈复杂度Cyclomatic complexity">
+<meta property="og:url" content="https://retech-fe.github.io/blog/2023/03/06/test/index.html">
 <meta property="og:site_name" content="Re:Tech FE Blog">
-<meta property="og:description" content="在这篇文章中，对&#96;Docker&#96;中&#96;ADD&#96;和&#96;COPY&#96;的这两个命令进行了解释和对比，你将知道如何选择来使用它们。">
+<meta property="og:description" content="在这篇文章中，讲了圈复杂度的概念、计算公式及如何配置eslint开启圈复杂度，如何解决圈复杂度过高的问题。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-09-10T12:05:02.000Z">
-<meta property="article:modified_time" content="2023-03-06T07:15:16.482Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/14-54-22-78548692f412e5904d0cdb650cb3f141-20230306145422-04147e.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/14-58-30-35e2be49e73290a1028b76d1e847330b-20230306145830-645e85.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/14-59-51-09da9f88755c191baecab8174da3c497-20230306145951-82f7b0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/15-01-09-7a5cc01e5c878b8cd28ac1b434e1dee1-20230306150109-2ea885.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/15-02-10-eb43a94fcc8b53e360a080a72698c1ed-20230306150210-eaeedc.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/15-02-56-9e58887695dbef50aa4555278893f32d-20230306150256-1d8dd9.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/15-05-04-36e0b4502e2b6ae789d6b90dcbd10ad4-20230306150503-2ec51a.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/15-05-47-a067e2a5164d64bf11d94e0c90a63a1c-20230306150547-66cf07.png">
+<meta property="article:published_time" content="2023-03-06T15:13:02.000Z">
+<meta property="article:modified_time" content="2023-03-06T07:15:16.486Z">
 <meta property="article:author" content="Re:Tech FE">
-<meta property="article:tag" content="CICD">
+<meta property="article:tag" content="eslint">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/14-54-22-78548692f412e5904d0cdb650cb3f141-20230306145422-04147e.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Docker中ADD和COPY的区别 - Re:Tech FE Blog</title>
+  <title>圈复杂度Cyclomatic complexity - Re:Tech FE Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -225,7 +234,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Docker中ADD和COPY的区别"></span>
+            <span id="subtitle" data-typed-text="圈复杂度Cyclomatic complexity"></span>
           
         </div>
 
@@ -241,8 +250,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-09-10 12:05" pubdate>
-          2022年9月10日 中午
+        <time datetime="2023-03-06 15:13" pubdate>
+          2023年3月6日 下午
         </time>
       </span>
     
@@ -253,7 +262,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          210 字
         
       </span>
     
@@ -264,7 +273,7 @@
         
         
         
-          14 分钟
+          2 分钟
         
       </span>
     
@@ -310,52 +319,37 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Docker中ADD和COPY的区别</h1>
+            <h1 style="display: none">圈复杂度Cyclomatic complexity</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>当我们在使用<code>Dockerfile</code>创建镜像时，你可以使用两个命令来进行文件或者目录的复制：<code>ADD</code>和<code>COPY</code>。它们的用途基本上是一致的除了有一些小的不同点。</p>
-<p>于是，为什么会有两个命令呢？我们在什么情况下使用它们呢？</p>
-<p>在这篇文章中，会对每个命令进行解释以及分析<code>Docker</code>中<code>ADD</code>和<code>COPY</code>的对比，你将知道如何选择来使用它们。</p>
-<h2 id="Docker-ADD-命令"><a href="#Docker-ADD-命令" class="headerlink" title="Docker ADD 命令"></a>Docker ADD 命令</h2><p><code>ADD</code> 指令在<code>Docker</code>平台出现得比较早，在早期就已经是命令集合中的一员了。<code>ADD</code>主要是复制文件和目录到特定容器下的文件系统中。</p>
-<p><code>ADD</code>命令的基本语法如下：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">ADD <span class="hljs-tag">&lt;<span class="hljs-name">src</span>&gt;</span> … <span class="hljs-tag">&lt;<span class="hljs-name">dest</span>&gt;</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="复制文件"><a href="#复制文件" class="headerlink" title="复制文件"></a>复制文件</h3><p>它包含你想要复制的源文件（<code>src</code>）以及你需要存储的目的地（<code>dest</code>）。如果给定的<code>src</code>是一个目录的话，<code>ADD</code>命令将会复制目录下的所有文件。</p>
-<p>例如，如果文件存在于本地，并且你想要复制到一个目录，你可以这样：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle">ADD <span class="hljs-regexp">/source/</span><span class="hljs-keyword">file</span><span class="hljs-regexp">/path  /</span>destination/path<br></code></pre></td></tr></table></figure>
-
-<h3 id="远程复制文件"><a href="#远程复制文件" class="headerlink" title="远程复制文件"></a>远程复制文件</h3><p><code>ADD</code>命令同时也支持从一个远程地址复制文件。它将会从远程下载文件，并且复制到容器内的文件系统，例如：</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">ADD http:<span class="hljs-regexp">//</span>source.file<span class="hljs-regexp">/url  /</span>destination/path<br></code></pre></td></tr></table></figure>
-
-<h3 id="本地解压文件并复制文件"><a href="#本地解压文件并复制文件" class="headerlink" title="本地解压文件并复制文件"></a>本地解压文件并复制文件</h3><p>如下，指定本地的压缩文件，以及要复制的容器目标文件系统路径即可：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">ADD source<span class="hljs-selector-class">.file</span><span class="hljs-selector-class">.tar</span><span class="hljs-selector-class">.gz</span> /temp<br></code></pre></td></tr></table></figure>
-
-<p>这里需要注意的是，你不能从远程地址下载和解压缩文件或者目录。</p>
-<h2 id="Docker-COPY命令"><a href="#Docker-COPY命令" class="headerlink" title="Docker COPY命令"></a>Docker COPY命令</h2><p>基于有些功能问题，<code>Docker</code>不得不增加另外的命令来复制内容，也就是<code>COPY</code>命令。</p>
-<p>不同于<code>ADD</code>命令，<code>COPY</code>指令仅仅只有一个功能。它的角色就是复制本地的文件或者目录到容器的文件系统。也就意味着它不会去解压缩一个压缩的文件，仅仅只是复制而已。</p>
-<p>这个指令只能用在处理本地的文件。也就是说，你不能用它来复制远程路径的文件到容器内。</p>
-<p>下面是使用 <code>COPY</code> 命令的基本语法：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">COPY <span class="hljs-tag">&lt;<span class="hljs-name">src</span>&gt;</span> … <span class="hljs-tag">&lt;<span class="hljs-name">dest</span>&gt;</span><br></code></pre></td></tr></table></figure>
-
-<p>For example:</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">COPY</span> <span class="hljs-regexp">/source/</span><span class="hljs-keyword">file</span><span class="hljs-regexp">/path  /</span>destination/path<br></code></pre></td></tr></table></figure>
-
-<h2 id="Docker-Copy-vs-ADD"><a href="#Docker-Copy-vs-ADD" class="headerlink" title="Docker Copy vs ADD"></a>Docker Copy vs ADD</h2><p>那为什么<code>Docker</code>需要添加一个新的，并且相近的命令？</p>
-<p>事实就是 <code>ADD</code> 命令在实践过程中有很多的功能问题出现，并且它极其的不可预测。这个不稳定的表现结果经常是出现在你复制内容的时候，到底是需要压缩的内容还是解压缩内容。</p>
-<p><code>Docker</code>由于有很多存在的用途，并不能完全替代 <code>ADD</code> 命令。同时，为了向后兼容，最好的稳妥做法就是添加 <code>COPY</code> 命令。</p>
-<h3 id="到底如何选择？"><a href="#到底如何选择？" class="headerlink" title="到底如何选择？"></a>到底如何选择？</h3><p>Docker的官方文件有提到，应当尽可能的使用 <code>COPY</code>，原因是相对于 <code>ADD</code>，它的使用更加透明。</p>
-<p>如果你需要复制本地的内容到容器内，最好用 <code>COPY</code>。</p>
-<p><code>Docker</code>团队同时也强烈建议不要使用 <code>ADD</code> 来下载和复制远程地址文件，而是使用更加安全和高效地通过 <code>RUN</code> 命令来使用 <code>wget</code> 或者 <code>curl</code> 达到同样的功能。如果这样操作的话，你将避免创建新的镜像层，以及减少镜像大小。</p>
-<p>例如，你想要下载远程地址的一个压缩文件，解压缩内容，并在最后清除下载包。</p>
-<p>使用 <code>ADD</code> 的方式：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gradle">ADD http:<span class="hljs-comment">//source.file/package.file.tar.gz /temp</span><br>RUN tar -xjf <span class="hljs-regexp">/temp/</span><span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz \<br>  &amp;&amp; make -C <span class="hljs-regexp">/tmp/</span><span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span> \<br>  &amp;&amp; rm <span class="hljs-regexp">/tmp/</span> <span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz<br></code></pre></td></tr></table></figure>
-
-<p>你应该这样做：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gradle">RUN curl http:<span class="hljs-comment">//source.file/package.file.tar.gz \</span><br>  | tar -xjC <span class="hljs-regexp">/tmp/</span> <span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz \<br>  &amp;&amp; make -C <span class="hljs-regexp">/tmp/</span> <span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz<br></code></pre></td></tr></table></figure>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总结来说，尽量使用 <code>COPY</code> 命令。就像<code>Docker</code>官方的建议一样，尽量避免使用 <code>ADD</code> 命令，除非你需要复制一个本地压缩文件并在容器内进行解压缩。</p>
+                <h2 id="圈复杂度是什么"><a href="#圈复杂度是什么" class="headerlink" title="圈复杂度是什么"></a>圈复杂度是什么</h2><ul>
+<li>圈复杂度是公认的衡量代码质量的重要标准，记作V(G)</li>
+<li>它主要反映代码中的路径数量，它的值越大，表示代码越难测试和维护</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/14-54-22-78548692f412e5904d0cdb650cb3f141-20230306145422-04147e.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h2 id="如何计算圈复杂度"><a href="#如何计算圈复杂度" class="headerlink" title="如何计算圈复杂度"></a>如何计算圈复杂度</h2><p>通常使用两种方式来计算V(G)</p>
+<p><em><strong>方式一</strong></em></p>
+<p>V(G) &#x3D; e - n + 2</p>
+<p>其中，<code>e</code>表示流程图中的边数，<code>n</code>表示流程图中的节点数</p>
+<p><em><strong>方式二</strong></em></p>
+<p>V(G) &#x3D; R</p>
+<p>其中，R表示平面被流程图划分的区域数量</p>
+<p>示例一</p>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/14-58-30-35e2be49e73290a1028b76d1e847330b-20230306145830-645e85.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>示例二</p>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/14-59-51-09da9f88755c191baecab8174da3c497-20230306145951-82f7b0.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/15-01-09-7a5cc01e5c878b8cd28ac1b434e1dee1-20230306150109-2ea885.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p>示例三</p>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/15-02-10-eb43a94fcc8b53e360a080a72698c1ed-20230306150210-eaeedc.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/15-02-56-9e58887695dbef50aa4555278893f32d-20230306150256-1d8dd9.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h2 id="如何配置eslint圈复杂度"><a href="#如何配置eslint圈复杂度" class="headerlink" title="如何配置eslint圈复杂度"></a>如何配置eslint圈复杂度</h2><p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/15-05-04-36e0b4502e2b6ae789d6b90dcbd10ad4-20230306150503-2ec51a.png" srcset="/blog/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/retech-fe/image-hosting/main/img/2023/03/06/15-05-47-a067e2a5164d64bf11d94e0c90a63a1c-20230306150547-66cf07.png" srcset="/blog/img/loading.gif" lazyload></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ul>
+<li>对象映射</li>
+<li>提取函数，降低每个函数的圈复杂度</li>
+</ul>
 
                 
               </div>
@@ -374,7 +368,7 @@
     
       <span class="category-chain">
         
-  <a href="/blog/categories/DevOps/" class="category-chain-item">DevOps</a>
+  <a href="/blog/categories/%E5%B7%A5%E7%A8%8B%E5%8C%96/" class="category-chain-item">工程化</a>
   
   
 
@@ -389,7 +383,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/blog/tags/CICD/">#CICD</a>
+        <a href="/blog/tags/eslint/">#eslint</a>
       
     </div>
   
@@ -401,8 +395,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Docker中ADD和COPY的区别</div>
-      <div>https://retech-fe.github.io/blog/2022/09/10/docker-add-copy/</div>
+      <div>圈复杂度Cyclomatic complexity</div>
+      <div>https://retech-fe.github.io/blog/2023/03/06/test/</div>
     </div>
     <div class="license-meta">
       
@@ -414,7 +408,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年9月10日</div>
+          <div>2023年3月6日</div>
         </div>
       
       
@@ -444,18 +438,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2022/10/01/design-rule-ocp/" title="设计原则之开闭原则">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">设计原则之开闭原则</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2022/09/03/npm-install/" title="在生产环境中使你的 npm i 速度提升 50%">
-                        <span class="hidden-mobile">在生产环境中使你的 npm i 速度提升 50%</span>
+                      <a href="/blog/2023/03/06/import-live-bindings/" title="具名导入是解构么">
+                        <span class="hidden-mobile">具名导入是解构么</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
