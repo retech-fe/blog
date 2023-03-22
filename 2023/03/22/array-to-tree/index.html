@@ -13,27 +13,26 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="pengfei.zuo">
+  <meta name="author" content="haida.wang">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在这篇文章中，对&#96;Docker&#96;中&#96;ADD&#96;和&#96;COPY&#96;的这两个命令进行了解释和对比，你将知道如何选择来使用它们。">
+    <meta name="description" content="在这篇文章中，讲了扁平数据结构转Tree的两种方法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Docker中ADD和COPY的区别">
-<meta property="og:url" content="https://retech-fe.github.io/blog/2022/09/10/docker-add-copy/index.html">
+<meta property="og:title" content="扁平数据结构转Tree">
+<meta property="og:url" content="https://retech-fe.github.io/blog/2023/03/22/array-to-tree/index.html">
 <meta property="og:site_name" content="Re:Tech FE Blog">
-<meta property="og:description" content="在这篇文章中，对&#96;Docker&#96;中&#96;ADD&#96;和&#96;COPY&#96;的这两个命令进行了解释和对比，你将知道如何选择来使用它们。">
+<meta property="og:description" content="在这篇文章中，讲了扁平数据结构转Tree的两种方法">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-09-10T12:05:02.000Z">
-<meta property="article:modified_time" content="2023-03-22T08:01:22.110Z">
+<meta property="article:published_time" content="2023-03-22T15:55:02.000Z">
+<meta property="article:modified_time" content="2023-03-22T08:01:22.106Z">
 <meta property="article:author" content="Re:Tech FE">
-<meta property="article:tag" content="CICD">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Docker中ADD和COPY的区别 - Re:Tech FE Blog</title>
+  <title>扁平数据结构转Tree - Re:Tech FE Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -225,7 +224,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Docker中ADD和COPY的区别"></span>
+            <span id="subtitle" data-typed-text="扁平数据结构转Tree"></span>
           
         </div>
 
@@ -235,14 +234,14 @@
     
       <span class="post-meta mr-2">
         <i class="iconfont icon-author" aria-hidden="true"></i>
-        pengfei.zuo
+        haida.wang
       </span>
     
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-09-10 12:05" pubdate>
-          2022年9月10日 中午
+        <time datetime="2023-03-22 15:55" pubdate>
+          2023年3月22日 下午
         </time>
       </span>
     
@@ -253,7 +252,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          1.9k 字
         
       </span>
     
@@ -264,7 +263,7 @@
         
         
         
-          14 分钟
+          16 分钟
         
       </span>
     
@@ -310,52 +309,23 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Docker中ADD和COPY的区别</h1>
+            <h1 style="display: none">扁平数据结构转Tree</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>当我们在使用<code>Dockerfile</code>创建镜像时，你可以使用两个命令来进行文件或者目录的复制：<code>ADD</code>和<code>COPY</code>。它们的用途基本上是一致的除了有一些小的不同点。</p>
-<p>于是，为什么会有两个命令呢？我们在什么情况下使用它们呢？</p>
-<p>在这篇文章中，会对每个命令进行解释以及分析<code>Docker</code>中<code>ADD</code>和<code>COPY</code>的对比，你将知道如何选择来使用它们。</p>
-<h2 id="Docker-ADD-命令"><a href="#Docker-ADD-命令" class="headerlink" title="Docker ADD 命令"></a>Docker ADD 命令</h2><p><code>ADD</code> 指令在<code>Docker</code>平台出现得比较早，在早期就已经是命令集合中的一员了。<code>ADD</code>主要是复制文件和目录到特定容器下的文件系统中。</p>
-<p><code>ADD</code>命令的基本语法如下：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">ADD <span class="hljs-tag">&lt;<span class="hljs-name">src</span>&gt;</span> … <span class="hljs-tag">&lt;<span class="hljs-name">dest</span>&gt;</span><br></code></pre></td></tr></table></figure>
+                <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>打平的数据内容如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">let</span> arr = [<br>    &#123; <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;部门1&#x27;</span>, <span class="hljs-attr">pid</span>: <span class="hljs-number">0</span> &#125;,<br>    &#123; <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;部门2&#x27;</span>, <span class="hljs-attr">pid</span>: <span class="hljs-number">1</span> &#125;,<br>    &#123; <span class="hljs-attr">id</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;部门3&#x27;</span>, <span class="hljs-attr">pid</span>: <span class="hljs-number">1</span> &#125;,<br>    &#123; <span class="hljs-attr">id</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;部门4&#x27;</span>, <span class="hljs-attr">pid</span>: <span class="hljs-number">3</span> &#125;,<br>    &#123; <span class="hljs-attr">id</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;部门5&#x27;</span>, <span class="hljs-attr">pid</span>: <span class="hljs-number">4</span> &#125;,<br>];<br></code></pre></td></tr></table></figure>
 
-<h3 id="复制文件"><a href="#复制文件" class="headerlink" title="复制文件"></a>复制文件</h3><p>它包含你想要复制的源文件（<code>src</code>）以及你需要存储的目的地（<code>dest</code>）。如果给定的<code>src</code>是一个目录的话，<code>ADD</code>命令将会复制目录下的所有文件。</p>
-<p>例如，如果文件存在于本地，并且你想要复制到一个目录，你可以这样：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle">ADD <span class="hljs-regexp">/source/</span><span class="hljs-keyword">file</span><span class="hljs-regexp">/path  /</span>destination/path<br></code></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript">[<br>    &#123;<br>        <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1</span>,<br>        <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;部门1&quot;</span>,<br>        <span class="hljs-string">&quot;pid&quot;</span>: <span class="hljs-number">0</span>,<br>        <span class="hljs-string">&quot;children&quot;</span>: [<br>            &#123;<br>                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">2</span>,<br>                <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;部门2&quot;</span>,<br>                <span class="hljs-string">&quot;pid&quot;</span>: <span class="hljs-number">1</span>,<br>                <span class="hljs-string">&quot;children&quot;</span>: []<br>            &#125;,<br>            &#123;<br>                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">3</span>,<br>                <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;部门3&quot;</span>,<br>                <span class="hljs-string">&quot;pid&quot;</span>: <span class="hljs-number">1</span>,<br>                <span class="hljs-string">&quot;children&quot;</span>: [<br>                    &#123;<br>                        <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">4</span>,<br>                        <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;部门4&quot;</span>,<br>                        <span class="hljs-string">&quot;pid&quot;</span>: <span class="hljs-number">3</span>,<br>                        <span class="hljs-string">&quot;children&quot;</span>: [<br>                            &#123;<br>                                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">5</span>,<br>                                <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;部门5&quot;</span>,<br>                                <span class="hljs-string">&quot;pid&quot;</span>: <span class="hljs-number">43</span>,<br>                                <span class="hljs-string">&quot;children&quot;</span>: []<br>                            &#125;<br>                        ]<br>                    &#125;<br>                ]<br>            &#125;<br>        ]<br>    &#125;<br>]<br></code></pre></td></tr></table></figure>
 
-<h3 id="远程复制文件"><a href="#远程复制文件" class="headerlink" title="远程复制文件"></a>远程复制文件</h3><p><code>ADD</code>命令同时也支持从一个远程地址复制文件。它将会从远程下载文件，并且复制到容器内的文件系统，例如：</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">ADD http:<span class="hljs-regexp">//</span>source.file<span class="hljs-regexp">/url  /</span>destination/path<br></code></pre></td></tr></table></figure>
+<h2 id="方法-1"><a href="#方法-1" class="headerlink" title="方法 1"></a>方法 1</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">arrayToTree</span>(<span class="hljs-params">arr</span>) &#123;<br>    <span class="hljs-comment">// 循环所有元素</span><br>    arr.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">a</span>) =&gt;</span> &#123;<br>        <span class="hljs-comment">// 给当前元素 a 添加 children 属性</span><br>        a.<span class="hljs-property">children</span> = [];<br><br>        <span class="hljs-comment">// 循环所有元素</span><br>        arr.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">b</span>) =&gt;</span> &#123;<br>            <span class="hljs-comment">// 判断当前元素 b.pid 是否等于 a.id，如果相等，则为 a 的子级</span><br>            <span class="hljs-keyword">if</span> (b.<span class="hljs-property">pid</span> === a.<span class="hljs-property">id</span>) &#123;<br>                a.<span class="hljs-property">children</span>.<span class="hljs-title function_">push</span>(b)<br>            &#125;<br>        &#125;)<br>    &#125;)<br><br>    <span class="hljs-comment">// 查找所有 pid 等于 0 的元素</span><br>    <span class="hljs-keyword">return</span> arr.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">a</span>) =&gt;</span> a.<span class="hljs-property">pid</span> === <span class="hljs-number">0</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h3 id="本地解压文件并复制文件"><a href="#本地解压文件并复制文件" class="headerlink" title="本地解压文件并复制文件"></a>本地解压文件并复制文件</h3><p>如下，指定本地的压缩文件，以及要复制的容器目标文件系统路径即可：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">ADD source<span class="hljs-selector-class">.file</span><span class="hljs-selector-class">.tar</span><span class="hljs-selector-class">.gz</span> /temp<br></code></pre></td></tr></table></figure>
+<p>通过两次循环，利用引用类型的特性给所有数组添加自己的子级，再查找 pid 等于 0 的所有元素</p>
+<h2 id="方法-2"><a href="#方法-2" class="headerlink" title="方法 2"></a>方法 2</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs JavaScript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">arrayToTree</span>(<span class="hljs-params">arr</span>) &#123;<br>    <span class="hljs-comment">// 存放结果</span><br>    <span class="hljs-keyword">const</span> result = [];<br>    <span class="hljs-comment">// 以 id/pid 为 key 存放元素</span><br>    <span class="hljs-keyword">const</span> itemMap = &#123;&#125;;<br><br>    <span class="hljs-comment">// 循环所有元素</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> item <span class="hljs-keyword">of</span> arr) &#123;<br>        <span class="hljs-comment">// 取 item 中的 id 和 pid</span><br>        <span class="hljs-keyword">const</span> &#123; id, pid &#125; = item;<br><br>        <span class="hljs-comment">// 先以 id 为 key 存入 Map 中</span><br>        <span class="hljs-keyword">if</span> (!itemMap[id]) &#123;<br>            itemMap[id] = &#123;<br>                <span class="hljs-attr">children</span>: []<br>            &#125;<br>        &#125;<br>        itemMap[id] = &#123;<br>            ...item,<br>            <span class="hljs-attr">children</span>: itemMap[id].<span class="hljs-property">children</span>,<br>        &#125;<br><br>        <span class="hljs-comment">// 再从 Map 中取出元素</span><br>        <span class="hljs-keyword">const</span> treeItem = itemMap[id];<br><br>        <span class="hljs-comment">// 如果 pid 为 0，则直接放到结果中</span><br>        <span class="hljs-keyword">if</span> (pid === <span class="hljs-number">0</span>) &#123;<br>            result.<span class="hljs-title function_">push</span>(treeItem);<br>        &#125;<br>        <span class="hljs-comment">// 否则以 pid 为 key 存储 Map 中</span><br>        <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">if</span> (!itemMap[pid]) &#123;<br>                itemMap[pid] = &#123;<br>                    <span class="hljs-attr">children</span>: [],<br>                &#125;<br>            &#125;<br>            <span class="hljs-comment">// 将元素放入以 pid 为 key 的元素中的子级</span><br>            itemMap[pid].<span class="hljs-property">children</span>.<span class="hljs-title function_">push</span>(treeItem);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>这里需要注意的是，你不能从远程地址下载和解压缩文件或者目录。</p>
-<h2 id="Docker-COPY命令"><a href="#Docker-COPY命令" class="headerlink" title="Docker COPY命令"></a>Docker COPY命令</h2><p>基于有些功能问题，<code>Docker</code>不得不增加另外的命令来复制内容，也就是<code>COPY</code>命令。</p>
-<p>不同于<code>ADD</code>命令，<code>COPY</code>指令仅仅只有一个功能。它的角色就是复制本地的文件或者目录到容器的文件系统。也就意味着它不会去解压缩一个压缩的文件，仅仅只是复制而已。</p>
-<p>这个指令只能用在处理本地的文件。也就是说，你不能用它来复制远程路径的文件到容器内。</p>
-<p>下面是使用 <code>COPY</code> 命令的基本语法：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml">COPY <span class="hljs-tag">&lt;<span class="hljs-name">src</span>&gt;</span> … <span class="hljs-tag">&lt;<span class="hljs-name">dest</span>&gt;</span><br></code></pre></td></tr></table></figure>
-
-<p>For example:</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gradle"><span class="hljs-keyword">COPY</span> <span class="hljs-regexp">/source/</span><span class="hljs-keyword">file</span><span class="hljs-regexp">/path  /</span>destination/path<br></code></pre></td></tr></table></figure>
-
-<h2 id="Docker-Copy-vs-ADD"><a href="#Docker-Copy-vs-ADD" class="headerlink" title="Docker Copy vs ADD"></a>Docker Copy vs ADD</h2><p>那为什么<code>Docker</code>需要添加一个新的，并且相近的命令？</p>
-<p>事实就是 <code>ADD</code> 命令在实践过程中有很多的功能问题出现，并且它极其的不可预测。这个不稳定的表现结果经常是出现在你复制内容的时候，到底是需要压缩的内容还是解压缩内容。</p>
-<p><code>Docker</code>由于有很多存在的用途，并不能完全替代 <code>ADD</code> 命令。同时，为了向后兼容，最好的稳妥做法就是添加 <code>COPY</code> 命令。</p>
-<h3 id="到底如何选择？"><a href="#到底如何选择？" class="headerlink" title="到底如何选择？"></a>到底如何选择？</h3><p>Docker的官方文件有提到，应当尽可能的使用 <code>COPY</code>，原因是相对于 <code>ADD</code>，它的使用更加透明。</p>
-<p>如果你需要复制本地的内容到容器内，最好用 <code>COPY</code>。</p>
-<p><code>Docker</code>团队同时也强烈建议不要使用 <code>ADD</code> 来下载和复制远程地址文件，而是使用更加安全和高效地通过 <code>RUN</code> 命令来使用 <code>wget</code> 或者 <code>curl</code> 达到同样的功能。如果这样操作的话，你将避免创建新的镜像层，以及减少镜像大小。</p>
-<p>例如，你想要下载远程地址的一个压缩文件，解压缩内容，并在最后清除下载包。</p>
-<p>使用 <code>ADD</code> 的方式：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs gradle">ADD http:<span class="hljs-comment">//source.file/package.file.tar.gz /temp</span><br>RUN tar -xjf <span class="hljs-regexp">/temp/</span><span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz \<br>  &amp;&amp; make -C <span class="hljs-regexp">/tmp/</span><span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span> \<br>  &amp;&amp; rm <span class="hljs-regexp">/tmp/</span> <span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz<br></code></pre></td></tr></table></figure>
-
-<p>你应该这样做：</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gradle">RUN curl http:<span class="hljs-comment">//source.file/package.file.tar.gz \</span><br>  | tar -xjC <span class="hljs-regexp">/tmp/</span> <span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz \<br>  &amp;&amp; make -C <span class="hljs-regexp">/tmp/</span> <span class="hljs-keyword">package</span>.<span class="hljs-keyword">file</span>.tar.gz<br></code></pre></td></tr></table></figure>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总结来说，尽量使用 <code>COPY</code> 命令。就像<code>Docker</code>官方的建议一样，尽量避免使用 <code>ADD</code> 命令，除非你需要复制一个本地压缩文件并在容器内进行解压缩。</p>
+<p>通过 Map 类型，以 id&#x2F;pid 为 key，一次循环即可将所有元素的父子关系添加完成</p>
 
                 
               </div>
@@ -374,7 +344,7 @@
     
       <span class="category-chain">
         
-  <a href="/blog/categories/DevOps/" class="category-chain-item">DevOps</a>
+  <a href="/blog/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
   
   
 
@@ -386,13 +356,6 @@
     </div>
   
   
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/blog/tags/CICD/">#CICD</a>
-      
-    </div>
-  
 </div>
 
 
@@ -401,20 +364,20 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Docker中ADD和COPY的区别</div>
-      <div>https://retech-fe.github.io/blog/2022/09/10/docker-add-copy/</div>
+      <div>扁平数据结构转Tree</div>
+      <div>https://retech-fe.github.io/blog/2023/03/22/array-to-tree/</div>
     </div>
     <div class="license-meta">
       
         <div class="license-meta-item">
           <div>作者</div>
-          <div>pengfei.zuo</div>
+          <div>haida.wang</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年9月10日</div>
+          <div>2023年3月22日</div>
         </div>
       
       
@@ -444,18 +407,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/blog/2022/10/01/design-rule-ocp/" title="设计原则之开闭原则">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">设计原则之开闭原则</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/blog/2022/09/03/npm-install/" title="在生产环境中使你的 npm i 速度提升 50%">
-                        <span class="hidden-mobile">在生产环境中使你的 npm i 速度提升 50%</span>
+                      <a href="/blog/2023/03/06/cyclomatic-complexity/" title="圈复杂度Cyclomatic complexity">
+                        <span class="hidden-mobile">圈复杂度Cyclomatic complexity</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
